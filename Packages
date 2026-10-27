@@ -1,0 +1,15 @@
+Package: fr.privos.control
+Version: 0.5.0
+Architecture: iphoneos-arm64
+Maintainer: PRIV OS Lab
+Depends: firmware (>= 15.0), firmware (<< 18.0)
+Suggests: com.opa334.ccsupport
+Filename: debs/fr.privos.control_0.5.0_iphoneos-arm64.deb
+Size: 204288
+MD5sum: af00a5f4f2a71153fd7fe8281c2d1e14
+SHA1: cd33a2ec52ab5e7353dafb9c9cd912f761f4fbee
+SHA256: 7a7dc8f59ec4043469573c27c5aa0ef1c203857a256c3855fd57704b5fbff4e2
+Section: Applications
+Priority: optional
+Description: Une application iOS native et deux modules Centre de controle CCSupport opt-in, et 20 icones de theme pretes pour un moteur compatible. Aucune coupure camera/micro ni VPN. La version 0.5 ne modifie pas SpringBoard pendant l'installation.
+Name: PRIV OS LAB 0.5 (Application + Centre de controle + theme)

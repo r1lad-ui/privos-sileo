@@ -1,7 +1,21 @@
 # PRIV OS LAB — Sileo repository
 
-Experimental builds for iPhone SE (2020), iOS 17.5, Dopamine rootless.
+**Experimental rootless iOS package for iPhone SE 2020, iOS 17.5 and Dopamine.**
 
-Installation packages are undergoing publication and verification. Do not add this repository to Sileo until the public HTTPS endpoint and package checksum are verified.
+## Installation through Sileo
+Use this HTTPS address in Sileo > Sources > + once GitHub Pages is enabled and its content verified:
 
-Current prototype: PRIV OS 0.5. This is not a replacement for iOS, cannot physically disable camera or microphone, and is not a verified security product.
+`https://r1lad-ui.github.io/privos-sileo/`
+
+Install **PRIV OS LAB 0.5** from Sileo. The rootless architecture is `iphoneos-arm64`.
+
+## Important limitations
+- Prototype package: **not yet validated on the target device** for the Control Center modules.
+- No VPN included, no guaranteed automatic camera/microphone blocking, and no replacement of iOS.
+- The icons are resources that still require a compatible theme engine to activate.
+- Two Control Center modules require CCSupport, and should be enabled one by one only after checking stability.
+- No automatic modification of SpringBoard on installation.
+- This repository's Release metadata are **unsigned**. Never use it for sensitive/commercial security deployments without further testing, signing and audit.
+
+## Maintainer
+Experimental PRIV OS project. iOS and Dopamine are third-party software. No affiliation with Apple or GrapheneOS.
