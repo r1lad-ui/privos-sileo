@@ -1,16 +1,14 @@
 Package: fr.privos.control
-Version: 0.5.0
+Version: 0.5.1
 Architecture: iphoneos-arm64
 Maintainer: PRIV OS Lab
-Depends: firmware (>= 15.0), firmware (<< 18.0)
-Suggests: com.opa334.ccsupport
-Filename: debs/fr.privos.control_0.5.0_iphoneos-arm64.deb
-Size: 204288
-MD5sum: af00a5f4f2a71153fd7fe8281c2d1e14
-SHA1: cd33a2ec52ab5e7353dafb9c9cd912f761f4fbee
-SHA256: 7a7dc8f59ec4043469573c27c5aa0ef1c203857a256c3855fd57704b5fbff4e2
+Depends: firmware (>= 15.0), firmware (<< 18.0), com.opa334.ccsupport
+Filename: debs/PRIV_OS_0_5_1_Sileo_iphoneos-arm64.deb
+Size: 204400
+MD5sum: 25e19fe36abce83a5ae76e7dafb33845
+SHA1: e8f02230fc5f1ee11aacebdf4d5e19dde3790fda
+SHA256: a5413bf69ae8c6dd2c6fe3ff17f4f09cbbcf84281729b92a3561e7a4b18fa675
 Section: Applications
 Priority: optional
-Description: Une application iOS native et deux modules Centre de controle CCSupport opt-in, et 20 icones de theme pretes pour un moteur compatible. Aucune coupure camera/micro ni VPN. La version 0.5 ne modifie pas SpringBoard pendant l'installation.
-Name: PRIV OS LAB 0.5 (Application + Centre de controle + theme)
-
+Name: PRIV OS LAB 0.5.1 (modules CC corriges)
+Description: Corrige la declaration des deux modules du Centre de controle pour CCSupport. Application PRIV et coffre inchanges. Version experimentale iOS 17.5 Dopamine rootless. Pas de VPN ou blocage materiel.
