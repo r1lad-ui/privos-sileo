@@ -2,14 +2,14 @@ Origin: PRIV OS Lab
 Label: PRIV OS Lab
 Suite: stable
 Codename: privos
-Version: 0.5.1
+Version: 0.5.2
 Architectures: iphoneos-arm64
 Components: main
-Description: PRIV OS Lab rootless Dopamine iOS 17.5 - experimental
-Date: Tue, 27 Oct 2026 14:45:00 +0000
+Description: PRIV OS Lab 0.5.2 rootless experimental
+Date: Tue, 27 Oct 2026 15:38:00 +0000
 MD5Sum:
- fa02db98f9ab29266a39cac3f45f2bfb 691 Packages
- a51aa7d896d505a0c4e3a32b840ccb27 481 Packages.gz
+ bae9be04c35baef38abb2b3589ee53b7 696 Packages
+ 9762b7124b283f7775b0998f26e94202 492 Packages.gz
 SHA256:
- 0e1c20d936a4093f2c8081641581f467fd9ef5864c71ec45628e47806c681bbb 691 Packages
- 618248ffc574b2ee7be57985d117ffece200224f94651eba90161f89754f4298 481 Packages.gz
+ 06c944a63c627b75db5782f56c66abb4c6a5058e27b9f0eedff9d668062a1dfc 696 Packages
+ a6a249bda4242e28277faf9a386c34846cdb5fc3c0325423403fd4b67e276620 492 Packages.gz

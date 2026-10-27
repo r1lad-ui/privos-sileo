@@ -1,14 +1,14 @@
 Package: fr.privos.control
-Version: 0.5.1
+Version: 0.5.2
 Architecture: iphoneos-arm64
 Maintainer: PRIV OS Lab
 Depends: firmware (>= 15.0), firmware (<< 18.0), com.opa334.ccsupport
-Filename: debs/PRIV_OS_0_5_1_Sileo_iphoneos-arm64.deb
-Size: 204400
-MD5sum: 25e19fe36abce83a5ae76e7dafb33845
-SHA1: e8f02230fc5f1ee11aacebdf4d5e19dde3790fda
-SHA256: a5413bf69ae8c6dd2c6fe3ff17f4f09cbbcf84281729b92a3561e7a4b18fa675
+Filename: debs/PRIV_OS_0_5_2_Sileo_iphoneos-arm64.deb
+Size: 213680
+MD5sum: 47bd2ceb90d0a189ed5983aa22142fc8
+SHA1: 9d933534ce4e72b0cbda070f3083e6747c6350b5
+SHA256: 2f6168d842cff85e579cd0a83b4094ce1bb1aedc31b1d38916fb67406d740aae
 Section: Applications
 Priority: optional
-Name: PRIV OS LAB 0.5.1 (modules CC corriges)
-Description: Corrige la declaration des deux modules du Centre de controle pour CCSupport. Application PRIV et coffre inchanges. Version experimentale iOS 17.5 Dopamine rootless. Pas de VPN ou blocage materiel.
+Name: PRIV OS LAB 0.5.2 (modules natifs)
+Description: Module PRIV Control remplace par le lanceur natif iOS CCUIAppLauncherModule; module presse-papiers compile en Objective-C et relie a ControlCenterUIKit. Application et coffre inchanges. Prototype non audite.
