@@ -19,3 +19,8 @@ Install **PRIV OS LAB 0.5** from Sileo. The rootless architecture is `iphoneos-a
 
 ## Maintainer
 Experimental PRIV OS project. iOS and Dopamine are third-party software. No affiliation with Apple or GrapheneOS.
+
+## Source directe de test (sans GitHub Pages)
+Si GitHub Pages n'est pas encore activé, Sileo peut tenter l'adresse APT brute `https://raw.githubusercontent.com/r1lad-ui/privos-sileo/main/`. Les fichiers `Release`, `Packages`, `Packages.gz` et le paquet `.deb` y sont publiés, mais ce point d'accès n'a pas été testé avec Sileo sur l'iPhone.
+
+Pour une adresse permanente adaptée aux utilisateurs, activer dans GitHub **Settings > Pages > Deploy from a branch > main > / (root)**, puis utiliser `https://r1lad-ui.github.io/privos-sileo/` une fois le site réellement accessible.
