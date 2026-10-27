@@ -13,3 +13,4 @@ Section: Applications
 Priority: optional
 Description: Une application iOS native et deux modules Centre de controle CCSupport opt-in, et 20 icones de theme pretes pour un moteur compatible. Aucune coupure camera/micro ni VPN. La version 0.5 ne modifie pas SpringBoard pendant l'installation.
 Name: PRIV OS LAB 0.5 (Application + Centre de controle + theme)
+
