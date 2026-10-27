@@ -7,7 +7,7 @@ Use this HTTPS address in Sileo > Sources > + once GitHub Pages is enabled and i
 
 `https://r1lad-ui.github.io/privos-sileo/`
 
-Install **PRIV OS LAB 0.5.1** from Sileo (correction `NSPrincipalClass` dans les deux modules CCSupport). The rootless architecture is `iphoneos-arm64`.
+Install **PRIV OS LAB 0.5.2** from Sileo. Cette version corrige la création/instanciation des deux modules via CCSupport.
 
 ## Important limitations
 - Prototype package: **not yet validated on the target device** for the Control Center modules.
@@ -27,3 +27,14 @@ Pour une adresse permanente adaptée aux utilisateurs, activer dans GitHub **Set
 
 ## Correction publiée le 27 octobre 2026
 Version **0.5.1** : les fichiers `Info.plist` des modules utilisaient une clé de classe principale incorrecte. Mettre à jour depuis Sileo, effectuer un seul respring, puis vérifier leur apparition dans Réglages → Centre de contrôle. Les modules sont encore expérimentaux et ne doivent pas être considérés comme testés sur l'appareil.
+
+## Mise à jour 0.5.2 (27 octobre 2026)
+
+- Module **PRIV Control** reconstruit avec le lanceur Apple `CCUIAppLauncherModule` documenté par CCSupport.
+- Module **Effacer texte copié** recompilé comme classe Objective-C native `CCUIToggleModule`.
+- Icônes et métadonnées des bundles vérifiées ; module 1×1.
+- Le code exécutable du coffre PRIV Control est inchangé (empreinte vérifiée).
+- **Test sur iPhone requis** : le dépôt et les fichiers sont validés, mais l'affichage et les actions du Centre de contrôle ne sont pas encore confirmés sur l'appareil.
+- Aucun script d'installation ne force un respring, ni ne modifie les permissions caméra/micro ou le VPN.
+
+[Voir les notes techniques](CHANGELOG_0.5.2.md).
