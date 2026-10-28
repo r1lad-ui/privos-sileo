@@ -1,14 +1,14 @@
 Package: fr.privos.control
-Version: 0.5.2
+Version: 0.5.3
 Architecture: iphoneos-arm64
 Maintainer: PRIV OS Lab
 Depends: firmware (>= 15.0), firmware (<< 18.0), com.opa334.ccsupport
-Filename: debs/PRIV_OS_0_5_2_Sileo_iphoneos-arm64.deb
-Size: 213680
-MD5sum: 47bd2ceb90d0a189ed5983aa22142fc8
-SHA1: 9d933534ce4e72b0cbda070f3083e6747c6350b5
-SHA256: 2f6168d842cff85e579cd0a83b4094ce1bb1aedc31b1d38916fb67406d740aae
+Filename: debs/PRIV_OS_0_5_3_Sileo_iphoneos-arm64.deb
+Size: 2273072
+MD5sum: 03f0f6f01840d7e2f5fa07c68a6befd3
+SHA1: 8a34874ae14286d3c1e413a7bd017ce923a8de7d
+SHA256: 9e0498b6671d11ca065a69f226926a4c9f1ec2b40f15a2abe8f4f8e5c51fd557
 Section: Applications
 Priority: optional
-Name: PRIV OS LAB 0.5.2 (modules natifs)
-Description: Module PRIV Control remplace par le lanceur natif iOS CCUIAppLauncherModule; module presse-papiers compile en Objective-C et relie a ControlCenterUIKit. Application et coffre inchanges. Prototype non audite.
+Name: PRIV OS LAB 0.5.3 (icones et fonds)
+Description: Extension du theme PRIV OS pour LumenBoard : messageries, Proton, finance, apps Apple et utilitaires. Fonds nuit et classique. Calendrier sans date figee. Application et modules conserves.

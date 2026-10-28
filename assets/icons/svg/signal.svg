@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<title>Signal — PRIV OS</title>
+<desc>Unofficial themed icon. Source: Reference: PRIV OS icon sheet supplied by user; Signal speech-bubble mark</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111e2d"/><stop offset="1" stop-color="#1c293b"/></linearGradient></defs>
+<rect width="512" height="512" fill="url(#bg)"/>
+<rect x="19" y="19" width="475" height="475" rx="110" fill="none" stroke="#78b9c3" stroke-width="3"/>
+<path d="M30 241 A224 211 0 0 1 280 30" fill="none" stroke="#83bdc9" stroke-width="3"/>
+<circle cx="379" cy="66" r="18" fill="#3ddcd8"/>
+<path d="M179 363 L140 378 L152 335 C135 311 126 283 126 253 C126 181 184 123 256 123 C328 123 386 181 386 253 C386 325 328 383 256 383 C228 383 202 376 179 363 Z" fill="none" stroke="#3ddcd8" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24 23"/><path d="M194 331 L169 342 L179 311 C167 294 160 274 160 253 C160 200 203 157 256 157 C309 157 352 200 352 253 C352 306 309 349 256 349 C234 349 212 343 194 331 Z" fill="none" stroke="#e1f0f8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

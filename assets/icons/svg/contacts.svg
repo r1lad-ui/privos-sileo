@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<title>Contacts — PRIV OS</title>
+<desc>Unofficial themed icon. Source: Original PRIV OS geometric glyph</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111e2d"/><stop offset="1" stop-color="#1c293b"/></linearGradient></defs>
+<rect width="512" height="512" fill="url(#bg)"/>
+<rect x="19" y="19" width="475" height="475" rx="110" fill="none" stroke="#78b9c3" stroke-width="3"/>
+<path d="M30 241 A224 211 0 0 1 280 30" fill="none" stroke="#83bdc9" stroke-width="3"/>
+<circle cx="379" cy="66" r="18" fill="#3ddcd8"/>
+<circle cx="256" cy="209" r="46" fill="#e1f0f8"/><circle cx="256" cy="209" r="29" fill="#152334"/><path d="M150 366 V349 Q150 286 213 286 H299 Q362 286 362 349 V366" fill="none" stroke="#3ddcd8" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

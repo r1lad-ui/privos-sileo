@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<title>Telegram — PRIV OS</title>
+<desc>Unofficial themed icon. Source: Reference: PRIV OS icon sheet supplied by user; Telegram paper-plane mark</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111e2d"/><stop offset="1" stop-color="#1c293b"/></linearGradient></defs>
+<rect width="512" height="512" fill="url(#bg)"/>
+<rect x="19" y="19" width="475" height="475" rx="110" fill="none" stroke="#78b9c3" stroke-width="3"/>
+<path d="M30 241 A224 211 0 0 1 280 30" fill="none" stroke="#83bdc9" stroke-width="3"/>
+<circle cx="379" cy="66" r="18" fill="#3ddcd8"/>
+<path d="M139 243 L365 147 Q377 141 372 159 L323 365 Q320 378 309 369 L242 312" fill="none" stroke="#e1f0f8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /><path d="M139 243 L215 280" fill="none" stroke="#e1f0f8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /><path d="M207 278 L330 191 L247 319 L215 300 Z" fill="#3ddcd8"/>
+</svg>

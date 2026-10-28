@@ -1,0 +1,347 @@
+[
+  {
+    "slug": "telegram",
+    "bundle_ids": [
+      "ph.telegra.Telegraph"
+    ],
+    "names": [
+      "Telegram",
+      "Telegram Messenger"
+    ],
+    "source": "https://apps.apple.com/fr/app/telegram-messenger/id686449807?uo=4"
+  },
+  {
+    "slug": "signal",
+    "bundle_ids": [
+      "org.whispersystems.signal"
+    ],
+    "names": [
+      "Signal"
+    ],
+    "source": "https://apps.apple.com/fr/app/signal-messagerie-priv%C3%A9e/id874139669?uo=4"
+  },
+  {
+    "slug": "proton-vpn",
+    "bundle_ids": [
+      "ch.protonmail.vpn"
+    ],
+    "names": [
+      "Proton VPN",
+      "ProtonVPN"
+    ],
+    "source": "https://apps.apple.com/fr/app/proton-vpn-priv%C3%A9-et-rapide/id1437005085?uo=4"
+  },
+  {
+    "slug": "reminders",
+    "bundle_ids": [
+      "com.apple.reminders"
+    ],
+    "names": [
+      "Rappels",
+      "Reminders"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "calendar",
+    "bundle_ids": [
+      "com.apple.mobilecal"
+    ],
+    "names": [
+      "Calendrier",
+      "Calendar"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "podcasts",
+    "bundle_ids": [
+      "com.apple.podcasts"
+    ],
+    "names": [
+      "Podcasts"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "revolut",
+    "bundle_ids": [
+      "com.revolut.revolut"
+    ],
+    "names": [
+      "Revolut"
+    ],
+    "source": "https://apps.apple.com/fr/app/revolut-plus-quune-banque/id932493382?uo=4"
+  },
+  {
+    "slug": "whatsapp",
+    "bundle_ids": [
+      "net.whatsapp.WhatsApp"
+    ],
+    "names": [
+      "WhatsApp"
+    ],
+    "source": "https://apps.apple.com/fr/app/whatsapp-messenger/id310633997?uo=4"
+  },
+  {
+    "slug": "exodus",
+    "bundle_ids": [
+      "exodus-movement.exodus"
+    ],
+    "names": [
+      "Exodus"
+    ],
+    "source": "https://apps.apple.com/fr/app/exodus-wallet-crypto-bitcoin/id1414384820?uo=4"
+  },
+  {
+    "slug": "crypto-com",
+    "bundle_ids": [
+      "co.mona.Monaco"
+    ],
+    "names": [
+      "Crypto.com"
+    ],
+    "source": "https://apps.apple.com/fr/app/crypto-com-tradez-les-march%C3%A9s/id1262148500?uo=4"
+  },
+  {
+    "slug": "crypto-com-onchain",
+    "bundle_ids": [
+      "com.defi.wallet"
+    ],
+    "names": [
+      "Crypto.com Onchain",
+      "DeFi Wallet",
+      "Onchain",
+      "Ult"
+    ],
+    "source": "https://apps.apple.com/fr/app/ult-trade-stocks-crypto/id1512048310?uo=4"
+  },
+  {
+    "slug": "alibaba",
+    "bundle_ids": [
+      "com.alibaba.sourcing"
+    ],
+    "names": [
+      "Alibaba.com",
+      "Alibaba"
+    ],
+    "source": "https://apps.apple.com/fr/app/commerce-b2b-avec-alibaba/id503451073?uo=4"
+  },
+  {
+    "slug": "contacts",
+    "bundle_ids": [
+      "com.apple.MobileAddressBook"
+    ],
+    "names": [
+      "Contacts"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "proton-mail",
+    "bundle_ids": [
+      "ch.protonmail.protonmail"
+    ],
+    "names": [
+      "Proton Mail",
+      "ProtonMail"
+    ],
+    "source": "https://apps.apple.com/fr/app/proton-mail-email-chiffr%C3%A9/id979659905?uo=4"
+  },
+  {
+    "slug": "proton-pass",
+    "bundle_ids": [
+      "me.proton.pass.ios"
+    ],
+    "names": [
+      "Proton Pass"
+    ],
+    "source": "https://apps.apple.com/fr/app/coffre-mots-de-passe-proton/id6443490629?uo=4"
+  },
+  {
+    "slug": "brave",
+    "bundle_ids": [
+      "com.brave.ios.browser"
+    ],
+    "names": [
+      "Brave"
+    ],
+    "source": "https://apps.apple.com/fr/app/brave-navigateur-web-priv%C3%A9/id1052879175?uo=4"
+  },
+  {
+    "slug": "firefox",
+    "bundle_ids": [
+      "org.mozilla.ios.Firefox"
+    ],
+    "names": [
+      "Firefox"
+    ],
+    "source": "https://apps.apple.com/fr/app/firefox-navigateur-internet/id989804926?uo=4"
+  },
+  {
+    "slug": "bitwarden",
+    "bundle_ids": [
+      "com.8bit.bitwarden"
+    ],
+    "names": [
+      "Bitwarden"
+    ],
+    "source": "https://apps.apple.com/fr/app/bitwarden/id1137397744?uo=4"
+  },
+  {
+    "slug": "google-authenticator",
+    "bundle_ids": [
+      "com.google.Authenticator"
+    ],
+    "names": [
+      "Google Authenticator",
+      "Authenticator"
+    ],
+    "source": "https://apps.apple.com/fr/app/google-authenticator/id388497605?uo=4"
+  },
+  {
+    "slug": "microsoft-authenticator",
+    "bundle_ids": [
+      "com.microsoft.azureauthenticator"
+    ],
+    "names": [
+      "Microsoft Authenticator"
+    ],
+    "source": "https://apps.apple.com/fr/app/microsoft-authenticator/id983156458?uo=4"
+  },
+  {
+    "slug": "youtube",
+    "bundle_ids": [
+      "com.google.ios.youtube"
+    ],
+    "names": [
+      "YouTube"
+    ],
+    "source": "https://apps.apple.com/fr/app/youtube/id544007664?uo=4"
+  },
+  {
+    "slug": "spotify",
+    "bundle_ids": [
+      "com.spotify.client"
+    ],
+    "names": [
+      "Spotify"
+    ],
+    "source": "https://apps.apple.com/fr/app/spotify-musique-et-podcasts/id324684580?uo=4"
+  },
+  {
+    "slug": "chatgpt",
+    "bundle_ids": [
+      "com.openai.chat"
+    ],
+    "names": [
+      "ChatGPT"
+    ],
+    "source": "https://apps.apple.com/fr/app/chatgpt/id6448311069?uo=4"
+  },
+  {
+    "slug": "aliexpress",
+    "bundle_ids": [
+      "com.alibaba.iAliexpress"
+    ],
+    "names": [
+      "AliExpress"
+    ],
+    "source": "https://apps.apple.com/fr/app/aliexpress-shopping-app/id436672029?uo=4"
+  },
+  {
+    "slug": "sileo",
+    "bundle_ids": [
+      "org.coolstar.SileoStore"
+    ],
+    "names": [
+      "Sileo"
+    ],
+    "source": "https://github.com/Sileo/Sileo/blob/main/Makefile"
+  },
+  {
+    "slug": "dopamine",
+    "bundle_ids": [
+      "com.opa334.Dopamine"
+    ],
+    "names": [
+      "Dopamine"
+    ],
+    "source": "https://github.com/opa334/Dopamine/blob/3.x/Application/Dopamine.xcodeproj/project.pbxproj"
+  },
+  {
+    "slug": "filza",
+    "bundle_ids": [
+      "com.tigisoftware.Filza"
+    ],
+    "names": [
+      "Filza"
+    ],
+    "source": "https://www.tigisoftware.com/cydia/com.tigisoftware.filza_4.0.1-2_iphoneos-arm64.deb"
+  },
+  {
+    "slug": "voice-memos",
+    "bundle_ids": [
+      "com.apple.VoiceMemos"
+    ],
+    "names": [
+      "Dictaphone",
+      "Voice Memos"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "books",
+    "bundle_ids": [
+      "com.apple.iBooks"
+    ],
+    "names": [
+      "Livres",
+      "Books"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "translate",
+    "bundle_ids": [
+      "com.apple.Translate"
+    ],
+    "names": [
+      "Traduire",
+      "Translate"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "shortcuts",
+    "bundle_ids": [
+      "com.apple.shortcuts"
+    ],
+    "names": [
+      "Raccourcis",
+      "Shortcuts"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "stocks",
+    "bundle_ids": [
+      "com.apple.stocks"
+    ],
+    "names": [
+      "Bourse",
+      "Stocks"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  },
+  {
+    "slug": "freeform",
+    "bundle_ids": [
+      "com.apple.freeform"
+    ],
+    "names": [
+      "Freeform"
+    ],
+    "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+  }
+]

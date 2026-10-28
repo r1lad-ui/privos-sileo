@@ -1,0 +1,249 @@
+{
+  "name": "PRIV OS additional icons",
+  "dimensions": [
+    512,
+    512
+  ],
+  "style": "Night blue / turquoise; same frame and corner dot as PRIV OS 0.5",
+  "palette": {
+    "background_top": "#111e2d",
+    "background_bottom": "#1c293b",
+    "white": "#e1f0f8",
+    "turquoise": "#3ddcd8",
+    "border": "#78b9c3"
+  },
+  "note": "These are unofficial personal theme resources, not replacement applications. Original installed icons remain unchanged except the neutral calendar when selected.",
+  "icons": [
+    {
+      "slug": "telegram",
+      "label": "Telegram",
+      "source": "Reference: earlier generated PRIV OS reference sheet; Telegram paper-plane mark",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "signal",
+      "label": "Signal",
+      "source": "Reference: earlier generated PRIV OS reference sheet; Signal speech-bubble mark",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "proton-vpn",
+      "label": "Proton VPN",
+      "source": "Reference: earlier generated PRIV OS reference sheet; https://protonvpn.com/press",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "reminders",
+      "label": "Rappels",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "calendar",
+      "label": "Calendrier",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "Neutral pictogram: no frozen date. Dynamic calendar support remains the theme engine responsibility.",
+      "required": true
+    },
+    {
+      "slug": "podcasts",
+      "label": "Podcasts",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "revolut",
+      "label": "Revolut",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/revolut.svg",
+      "notes": "Themed Revolut R with turquoise bowl accent.",
+      "required": true
+    },
+    {
+      "slug": "whatsapp",
+      "label": "WhatsApp",
+      "source": "Reference: earlier generated PRIV OS reference sheet; WhatsApp speech-bubble handset mark",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "exodus",
+      "label": "Exodus",
+      "source": "https://www.exodus.com/brand; reference: earlier generated PRIV OS reference sheet",
+      "notes": "Crossed chevrons/Exodus mark interpreted as in the earlier reference.",
+      "required": true
+    },
+    {
+      "slug": "crypto-com",
+      "label": "Crypto.com",
+      "source": "Reference: earlier generated PRIV OS reference sheet; Crypto.com lion mark",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "crypto-com-onchain",
+      "label": "Crypto.com Onchain",
+      "source": "Reference: Crypto.com lion mark; original chain badge for distinction",
+      "notes": "Companion variant distinguished by turquoise hexagon and small chain badge.",
+      "required": true
+    },
+    {
+      "slug": "alibaba",
+      "label": "Alibaba.com",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/alibabadotcom.svg",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "contacts",
+      "label": "Contacts",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": true
+    },
+    {
+      "slug": "proton-mail",
+      "label": "Proton Mail",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/protonmail.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "proton-pass",
+      "label": "Proton Pass",
+      "source": "https://proton.me/pass; original PRIV OS diamond/keyhole interpretation",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "brave",
+      "label": "Brave",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/brave.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "firefox",
+      "label": "Firefox",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/firefox.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "bitwarden",
+      "label": "Bitwarden",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/bitwarden.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "google-authenticator",
+      "label": "Google Authenticator",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/googleauthenticator.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "youtube",
+      "label": "YouTube",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/youtube.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "spotify",
+      "label": "Spotify",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/spotify.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "chatgpt",
+      "label": "ChatGPT",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/13.21.0/icons/openai.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "aliexpress",
+      "label": "AliExpress",
+      "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/aliexpress.svg",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "microsoft-authenticator",
+      "label": "Microsoft Authenticator",
+      "source": "https://www.microsoft.com/security/mobile-authenticator-app; original PRIV OS shield/key interpretation",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "sileo",
+      "label": "Sileo",
+      "source": "https://getsileo.app; original PRIV OS shopping bag/S interpretation",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "dopamine",
+      "label": "Dopamine",
+      "source": "Original PRIV OS molecule icon for Dopamine",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "filza",
+      "label": "Filza",
+      "source": "Original PRIV OS folder pictogram for Filza",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "voice-memos",
+      "label": "Dictaphone",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "books",
+      "label": "Livres",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "translate",
+      "label": "Traduire",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "shortcuts",
+      "label": "Raccourcis",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "stocks",
+      "label": "Bourse",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": false
+    },
+    {
+      "slug": "freeform",
+      "label": "Freeform",
+      "source": "Original PRIV OS geometric glyph",
+      "notes": "",
+      "required": false
+    }
+  ]
+}

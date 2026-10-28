@@ -7,7 +7,7 @@ Use this HTTPS address in Sileo > Sources > + once GitHub Pages is enabled and i
 
 `https://r1lad-ui.github.io/privos-sileo/`
 
-Install **PRIV OS LAB 0.5.2** from Sileo. Cette version corrige la création/instanciation des deux modules via CCSupport.
+Install **PRIV OS LAB 0.5.3 (icônes et fonds)** from Sileo, then open LumenBoard and apply **PRIV OS 0.5**. [Activation et fonds d’écran](ICONES.md).
 
 ## Important limitations
 - Prototype package: **not yet validated on the target device** for the Control Center modules.
@@ -38,3 +38,13 @@ Version **0.5.1** : les fichiers `Info.plist` des modules utilisaient une clé d
 - Aucun script d'installation ne force un respring, ni ne modifie les permissions caméra/micro ou le VPN.
 
 [Voir les notes techniques](CHANGELOG_0.5.2.md).
+
+## Mise à jour 0.5.3 (28 octobre 2026)
+
+- **53 applications couvertes** : 32 nouvelles associations et Calendrier corrigé, avec les icônes précédentes conservées.
+- Fond **PRIV Nuit** disponible au téléchargement et dans le paquet ; fond classique conservé.
+- Sources SVG et scripts de rendu/construction ajoutés pour les futures extensions.
+- L’application native, les modules et les scripts d’installation sont conservés octet pour octet par rapport à la 0.5.2.
+- Mise à jour visuelle seulement. Les protections de verrouillage se configurent dans iOS et dans les applications.
+
+[Installation et liste des apps](ICONES.md) · [Détails et reconstruction](CHANGELOG_0.5.3.md) · [Aperçu](previews/PRIV-Icons-0.5.3.png)

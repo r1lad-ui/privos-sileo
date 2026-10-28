@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<title>Sileo — PRIV OS</title>
+<desc>Unofficial themed icon. Source: https://getsileo.app; original PRIV OS shopping bag/S interpretation</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111e2d"/><stop offset="1" stop-color="#1c293b"/></linearGradient></defs>
+<rect width="512" height="512" fill="url(#bg)"/>
+<rect x="19" y="19" width="475" height="475" rx="110" fill="none" stroke="#78b9c3" stroke-width="3"/>
+<path d="M30 241 A224 211 0 0 1 280 30" fill="none" stroke="#83bdc9" stroke-width="3"/>
+<circle cx="379" cy="66" r="18" fill="#3ddcd8"/>
+<path d="M194 184 V169 Q194 119 256 119 Q318 119 318 169 V184" fill="none" stroke="#3ddcd8" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" /><rect x="145" y="180" width="222" height="208" rx="26" fill="none" stroke="#e1f0f8" stroke-width="16"/><path d="M289 235 Q268 214 236 226 Q210 235 218 258 Q224 276 257 279 Q289 282 292 306 Q294 335 263 342 Q231 347 213 328" fill="none" stroke="#3ddcd8" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

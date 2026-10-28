@@ -2,14 +2,14 @@ Origin: PRIV OS Lab
 Label: PRIV OS Lab
 Suite: stable
 Codename: privos
-Version: 0.5.2
+Version: 0.5.3
 Architectures: iphoneos-arm64
 Components: main
-Description: PRIV OS Lab 0.5.2 rootless experimental
-Date: Tue, 27 Oct 2026 15:38:00 +0000
+Description: PRIV OS Lab 0.5.3 rootless experimental
+Date: Wed, 28 Oct 2026 12:00:00 +0000
 MD5Sum:
- bae9be04c35baef38abb2b3589ee53b7 696 Packages
- 9762b7124b283f7775b0998f26e94202 492 Packages.gz
+ 62d9879e06e424b27bc38b0f4378c82d 679 Packages
+ 7a699cd419a46b7a7d54d04f882fd225 486 Packages.gz
 SHA256:
- 06c944a63c627b75db5782f56c66abb4c6a5058e27b9f0eedff9d668062a1dfc 696 Packages
- a6a249bda4242e28277faf9a386c34846cdb5fc3c0325423403fd4b67e276620 492 Packages.gz
+ 380f72d247fe39e7f5448ecb7b2466fec8452ef46ada4d76863e653b5a686a7b 679 Packages
+ 93dcc2bcb6bc795f4d79ecbeb60ac3d38cf7a117fa37335ab954425a3dbb5759 486 Packages.gz

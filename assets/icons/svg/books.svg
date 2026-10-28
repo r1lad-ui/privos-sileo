@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<title>Livres — PRIV OS</title>
+<desc>Unofficial themed icon. Source: Original PRIV OS geometric glyph</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111e2d"/><stop offset="1" stop-color="#1c293b"/></linearGradient></defs>
+<rect width="512" height="512" fill="url(#bg)"/>
+<rect x="19" y="19" width="475" height="475" rx="110" fill="none" stroke="#78b9c3" stroke-width="3"/>
+<path d="M30 241 A224 211 0 0 1 280 30" fill="none" stroke="#83bdc9" stroke-width="3"/>
+<circle cx="379" cy="66" r="18" fill="#3ddcd8"/>
+<path d="M256 185 Q205 147 145 157 V347 Q205 337 256 375 Q307 337 367 347 V157 Q307 147 256 185 Z" fill="none" stroke="#e1f0f8" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /><path d="M256 188 V367" fill="none" stroke="#3ddcd8" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" /><path d="M178 207 Q206 209 226 223 M178 249 Q206 251 226 265" fill="none" stroke="#3ddcd8" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

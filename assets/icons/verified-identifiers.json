@@ -1,0 +1,282 @@
+{
+  "source": "https://itunes.apple.com/lookup?id=686449807,874139669,1437005085,932493382,310633997,1414384820,1262148500,1512048310,503451073,979659905,6443490629,1052879175,989804926,388497605,983156458,1137397744,544007664,324684580,6448311069,436672029&country=fr",
+  "apps": [
+    {
+      "trackId": 686449807,
+      "trackName": "Telegram Messenger",
+      "bundleId": "ph.telegra.Telegraph",
+      "trackViewUrl": "https://apps.apple.com/fr/app/telegram-messenger/id686449807?uo=4",
+      "minimumOsVersion": "15.0"
+    },
+    {
+      "trackId": 874139669,
+      "trackName": "Signal - Messagerie privée",
+      "bundleId": "org.whispersystems.signal",
+      "trackViewUrl": "https://apps.apple.com/fr/app/signal-messagerie-priv%C3%A9e/id874139669?uo=4",
+      "minimumOsVersion": "15.0"
+    },
+    {
+      "trackId": 1437005085,
+      "trackName": "Proton VPN: Privé et Rapide",
+      "bundleId": "ch.protonmail.vpn",
+      "trackViewUrl": "https://apps.apple.com/fr/app/proton-vpn-priv%C3%A9-et-rapide/id1437005085?uo=4",
+      "minimumOsVersion": "17.0"
+    },
+    {
+      "trackId": 932493382,
+      "trackName": "Revolut — Plus qu'une banque",
+      "bundleId": "com.revolut.revolut",
+      "trackViewUrl": "https://apps.apple.com/fr/app/revolut-plus-quune-banque/id932493382?uo=4",
+      "minimumOsVersion": "15.0"
+    },
+    {
+      "trackId": 310633997,
+      "trackName": "WhatsApp Messenger",
+      "bundleId": "net.whatsapp.WhatsApp",
+      "trackViewUrl": "https://apps.apple.com/fr/app/whatsapp-messenger/id310633997?uo=4",
+      "minimumOsVersion": "15.1"
+    },
+    {
+      "trackId": 1414384820,
+      "trackName": "Exodus: Wallet Crypto Bitcoin",
+      "bundleId": "exodus-movement.exodus",
+      "trackViewUrl": "https://apps.apple.com/fr/app/exodus-wallet-crypto-bitcoin/id1414384820?uo=4",
+      "minimumOsVersion": "16.0"
+    },
+    {
+      "trackId": 1262148500,
+      "trackName": "Crypto.com: Tradez les marchés",
+      "bundleId": "co.mona.Monaco",
+      "trackViewUrl": "https://apps.apple.com/fr/app/crypto-com-tradez-les-march%C3%A9s/id1262148500?uo=4",
+      "minimumOsVersion": "15.1"
+    },
+    {
+      "trackId": 1512048310,
+      "trackName": "Ult: Trade Stocks & Crypto",
+      "bundleId": "com.defi.wallet",
+      "trackViewUrl": "https://apps.apple.com/fr/app/ult-trade-stocks-crypto/id1512048310?uo=4",
+      "minimumOsVersion": "15.1",
+      "themeName": "Crypto.com Onchain / DeFi",
+      "slug": "crypto-onchain",
+      "aliases": [
+        "Crypto.com Onchain",
+        "Crypto.com DeFi Wallet",
+        "DeFi Wallet",
+        "Onchain",
+        "Ult",
+        "Ult: Trade Stocks & Crypto"
+      ]
+    },
+    {
+      "trackId": 503451073,
+      "trackName": "Commerce B2B avec Alibaba",
+      "bundleId": "com.alibaba.sourcing",
+      "trackViewUrl": "https://apps.apple.com/fr/app/commerce-b2b-avec-alibaba/id503451073?uo=4",
+      "minimumOsVersion": "15.0"
+    },
+    {
+      "trackId": 979659905,
+      "trackName": "Proton Mail: Email chiffré",
+      "bundleId": "ch.protonmail.protonmail",
+      "trackViewUrl": "https://apps.apple.com/fr/app/proton-mail-email-chiffr%C3%A9/id979659905?uo=4",
+      "minimumOsVersion": "17.2"
+    },
+    {
+      "trackId": 6443490629,
+      "trackName": "Coffre mots de passe - Proton",
+      "bundleId": "me.proton.pass.ios",
+      "trackViewUrl": "https://apps.apple.com/fr/app/coffre-mots-de-passe-proton/id6443490629?uo=4",
+      "minimumOsVersion": "17.0"
+    },
+    {
+      "trackId": 1052879175,
+      "trackName": "Brave - Navigateur Web privé",
+      "bundleId": "com.brave.ios.browser",
+      "trackViewUrl": "https://apps.apple.com/fr/app/brave-navigateur-web-priv%C3%A9/id1052879175?uo=4",
+      "minimumOsVersion": "18.0"
+    },
+    {
+      "trackId": 989804926,
+      "trackName": "Firefox: Navigateur Internet",
+      "bundleId": "org.mozilla.ios.Firefox",
+      "trackViewUrl": "https://apps.apple.com/fr/app/firefox-navigateur-internet/id989804926?uo=4",
+      "minimumOsVersion": "15.0"
+    },
+    {
+      "trackId": 388497605,
+      "trackName": "Google Authenticator",
+      "bundleId": "com.google.Authenticator",
+      "trackViewUrl": "https://apps.apple.com/fr/app/google-authenticator/id388497605?uo=4",
+      "minimumOsVersion": "17.0"
+    },
+    {
+      "trackId": 983156458,
+      "trackName": "Microsoft Authenticator",
+      "bundleId": "com.microsoft.azureauthenticator",
+      "trackViewUrl": "https://apps.apple.com/fr/app/microsoft-authenticator/id983156458?uo=4",
+      "minimumOsVersion": "17.0"
+    },
+    {
+      "trackId": 1137397744,
+      "trackName": "Bitwarden",
+      "bundleId": "com.8bit.bitwarden",
+      "trackViewUrl": "https://apps.apple.com/fr/app/bitwarden/id1137397744?uo=4",
+      "minimumOsVersion": "15.0"
+    },
+    {
+      "trackId": 544007664,
+      "trackName": "YouTube",
+      "bundleId": "com.google.ios.youtube",
+      "trackViewUrl": "https://apps.apple.com/fr/app/youtube/id544007664?uo=4",
+      "minimumOsVersion": "17.0"
+    },
+    {
+      "trackId": 324684580,
+      "trackName": "Spotify : Musique et podcasts",
+      "bundleId": "com.spotify.client",
+      "trackViewUrl": "https://apps.apple.com/fr/app/spotify-musique-et-podcasts/id324684580?uo=4",
+      "minimumOsVersion": "16.1"
+    },
+    {
+      "trackId": 6448311069,
+      "trackName": "ChatGPT",
+      "bundleId": "com.openai.chat",
+      "trackViewUrl": "https://apps.apple.com/fr/app/chatgpt/id6448311069?uo=4",
+      "minimumOsVersion": "18.0"
+    },
+    {
+      "trackId": 436672029,
+      "trackName": "AliExpress Shopping App",
+      "bundleId": "com.alibaba.iAliexpress",
+      "trackViewUrl": "https://apps.apple.com/fr/app/aliexpress-shopping-app/id436672029?uo=4",
+      "minimumOsVersion": "13.0"
+    },
+    {
+      "trackName": "Rappels",
+      "bundleId": "com.apple.reminders",
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Calendrier",
+      "bundleId": "com.apple.mobilecal",
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Podcasts",
+      "bundleId": "com.apple.podcasts",
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Contacts",
+      "bundleId": "com.apple.MobileAddressBook",
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Sileo",
+      "bundleId": "org.coolstar.SileoStore",
+      "source": "https://github.com/Sileo/Sileo/blob/main/Makefile"
+    },
+    {
+      "trackName": "Dopamine",
+      "bundleId": "com.opa334.Dopamine",
+      "source": "https://github.com/opa334/Dopamine/blob/3.x/Application/Dopamine.xcodeproj/project.pbxproj"
+    },
+    {
+      "trackName": "LumenBoard",
+      "bundleId": "com.xsxs18.LumenBoard",
+      "source": "https://github.com/xsxs18-dev/LumenBoard/blob/main/App/Resources/Info.plist"
+    },
+    {
+      "trackName": "Filza",
+      "bundleId": "com.tigisoftware.Filza",
+      "source": "https://www.tigisoftware.com/cydia/com.tigisoftware.filza_4.0.1-2_iphoneos-arm64.deb",
+      "verification": "CFBundleIdentifier lu dans var/jb/Applications/Filza.app/Info.plist du paquet officiel, paquet uniquement extrait, jamais installé."
+    },
+    {
+      "trackName": "Dictaphone",
+      "slug": "voicememos",
+      "bundleId": "com.apple.VoiceMemos",
+      "aliases": [
+        "Dictaphone",
+        "Voice Memos"
+      ],
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Livres",
+      "slug": "books",
+      "bundleId": "com.apple.iBooks",
+      "aliases": [
+        "Livres",
+        "Books"
+      ],
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Traduire",
+      "slug": "translate",
+      "bundleId": "com.apple.Translate",
+      "aliases": [
+        "Traduire",
+        "Translate"
+      ],
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Raccourcis",
+      "slug": "shortcuts",
+      "bundleId": "com.apple.shortcuts",
+      "aliases": [
+        "Raccourcis",
+        "Shortcuts"
+      ],
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Bourse",
+      "slug": "stocks",
+      "bundleId": "com.apple.stocks",
+      "aliases": [
+        "Bourse",
+        "Stocks"
+      ],
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    },
+    {
+      "trackName": "Freeform",
+      "slug": "freeform",
+      "bundleId": "com.apple.freeform",
+      "aliases": [
+        "Freeform",
+        "Freeform"
+      ],
+      "source": "https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web"
+    }
+  ],
+  "theme_engine": {
+    "source": "https://github.com/xsxs18-dev/LumenBoard/blob/main/Shared/LMThemeLibrary.m",
+    "format": "IconBundles/<bundle-id>-large.png",
+    "size": "512x512",
+    "rootless_theme_path": "/var/jb/Library/Themes/PRIV OS 0.5.theme/",
+    "name_fallback": "Icons/<localized-app-name>.png",
+    "supports_suffixes": [
+      "-large",
+      "-dark",
+      "-tinted",
+      "@1x",
+      "@2x",
+      "@3x",
+      "~iphone",
+      "~ipad"
+    ],
+    "calendar_note": "Aucune fonction calendrier dynamique ni option calendrier observée dans main (28 octobre 2026). Ne pas promettre une date actualisée avec une PNG. Utiliser un pictogramme sans numéro pour éviter le 27 figé de la version précédente.",
+    "cache_action": "Apply; si nécessaire Settings > Clear icon cache & respring.",
+    "cache_source": "https://github.com/xsxs18-dev/LumenBoard/blob/main/App/LMSettingsViewController.m"
+  },
+  "checked_at": "2026-10-28",
+  "notes": [
+    "API App Store country=fr consultée directement; les IDs ne sont pas déduits du nom commercial.",
+    "Le trackId 1512048310, ancien Crypto.com DeFi/Onchain, est actuellement nommé Ult: Trade Stocks & Crypto dans la réponse Apple. Bundle com.defi.wallet. Garder séparé de co.mona.Monaco.",
+    "Certaines versions App Store actuelles exigent iOS 18; cela ne change pas le bundle ID des versions déjà installées. Ce manifeste ne recommande pas une mise à jour de ces apps."
+  ]
+}
