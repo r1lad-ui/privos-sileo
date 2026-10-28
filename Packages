@@ -15,7 +15,7 @@ Description: Ecran Securite : disponibilite du code et de Touch ID declaree par 
 
 Package: fr.privos.keylab
 Name: PRIV Key LAB
-Version: 0.1.0
+Version: 0.1.1
 Architecture: iphoneos-arm64
 Section: Applications
 Priority: optional
@@ -23,9 +23,9 @@ Maintainer: PRIV OS Lab
 Depends: firmware (>= 15.0)
 Installed-Size: 257
 Description: Releve natif de contours, etalonnage et modeles de silhouette pour cles de test. Exports locaux SVG, JSON et STL. Prototype a valider sur iPhone.
-Filename: debs/fr.privos.keylab_0.1.0_iphoneos-arm64.deb
-Size: 71806
-MD5sum: dee45eb54bc5558fb922744c9fd9467a
-SHA1: 9ca3a413fd570e5dfc5d98d42bf3b2ed0a225b5e
-SHA256: a6ed44ba0ab1403f4f25a12f322249e8ee2458571c4c599960506030440a7497
+Filename: debs/fr.privos.keylab_0.1.1_iphoneos-arm64.deb
+Size: 71946
+MD5sum: c175adba1710d608139341a48360def9
+SHA1: c62310e534bb439596e0074a5728e70bc6b5284a
+SHA256: e4b83952f83b6bf72603ab064472399fbe2709a6b5d8a00cc826cef35fba3f8b
 
