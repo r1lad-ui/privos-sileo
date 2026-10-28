@@ -3,11 +3,23 @@
 **Experimental rootless iOS package for iPhone SE 2020, iOS 17.5 and Dopamine.**
 
 ## Installation through Sileo
-Use this HTTPS address in Sileo > Sources > + once GitHub Pages is enabled and its content verified:
+Use the existing PRIV OS source, or add this address in Sileo > Sources > +:
 
-`https://r1lad-ui.github.io/privos-sileo/`
+`https://raw.githubusercontent.com/r1lad-ui/privos-sileo/main/`
 
-Install **PRIV OS LAB 0.5.3 (icônes et fonds)** from Sileo, then open LumenBoard and apply **PRIV OS 0.5**. [Activation et fonds d’écran](ICONES.md).
+Install **PRIV OS LAB 0.5.4 (Fonds dans Photos)** from Sileo. Close and reopen **PRIV Control**, then use **Fonds d’écran → Enregistrer dans Photos**. [Guide des fonds d’écran](FONDS.md).
+
+For icons, open LumenBoard and apply **PRIV OS 0.5**. [Activation et applications couvertes](ICONES.md).
+
+## Mise à jour 0.5.4 (28 octobre 2026)
+
+- Galerie native **Fonds d’écran**, accessible en haut de l’accueil de PRIV Control.
+- Aperçus **PRIV Nuit** et **PRIV Classique**, intégrés à l’app et disponibles hors ligne.
+- Ajout dans Photos sur demande, avec l’autorisation iOS et confirmation après l’enregistrement.
+- Boutons **Ouvrir Photos**, **Réglages iOS** et **Enregistrer à nouveau**.
+- Thème de 53 applications et modules conservés ; code du coffre, de l’import privé et du verrouillage préservé.
+
+[Instructions](FONDS.md) · [Notes et limites de validation](CHANGELOG_0.5.4.md) · [Sources natives](native/README.md)
 
 ## Important limitations
 - Prototype package: **not yet validated on the target device** for the Control Center modules.
@@ -20,8 +32,9 @@ Install **PRIV OS LAB 0.5.3 (icônes et fonds)** from Sileo, then open LumenBoar
 ## Maintainer
 Experimental PRIV OS project. iOS and Dopamine are third-party software. No affiliation with Apple or GrapheneOS.
 
-## Source directe de test (sans GitHub Pages)
-Si GitHub Pages n'est pas encore activé, Sileo peut tenter l'adresse APT brute `https://raw.githubusercontent.com/r1lad-ui/privos-sileo/main/`. Les fichiers `Release`, `Packages`, `Packages.gz` et le paquet `.deb` y sont publiés, mais ce point d'accès n'a pas été testé avec Sileo sur l'iPhone.
+## Adresse du dépôt
+
+La source APT brute utilisée pour ce projet est `https://raw.githubusercontent.com/r1lad-ui/privos-sileo/main/`. Les fichiers `Release`, `Packages`, `Packages.gz` et le paquet `.deb` y sont publiés et leurs empreintes vérifiées après publication. Cela ne remplace pas l'essai de la nouvelle version sur l'iPhone.
 
 Pour une adresse permanente adaptée aux utilisateurs, activer dans GitHub **Settings > Pages > Deploy from a branch > main > / (root)**, puis utiliser `https://r1lad-ui.github.io/privos-sileo/` une fois le site réellement accessible.
 

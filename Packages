@@ -1,14 +1,14 @@
 Package: fr.privos.control
-Version: 0.5.3
+Version: 0.5.4
 Architecture: iphoneos-arm64
 Maintainer: PRIV OS Lab
 Depends: firmware (>= 15.0), firmware (<< 18.0), com.opa334.ccsupport
-Filename: debs/PRIV_OS_0_5_3_Sileo_iphoneos-arm64.deb
-Size: 2273072
-MD5sum: 03f0f6f01840d7e2f5fa07c68a6befd3
-SHA1: 8a34874ae14286d3c1e413a7bd017ce923a8de7d
-SHA256: 9e0498b6671d11ca065a69f226926a4c9f1ec2b40f15a2abe8f4f8e5c51fd557
+Filename: debs/PRIV_OS_0_5_4_Sileo_iphoneos-arm64.deb
+Size: 2279056
+MD5sum: d11893aef7e7e4e25ec81d0098dd85f3
+SHA1: b2bb5f94841f8dd4147126cf4ab8917c500d16e1
+SHA256: 2e8f29fbf697a03203bb675afd36db26ac09cb367358ad435c3dde79eee88737
 Section: Applications
 Priority: optional
-Name: PRIV OS LAB 0.5.3 (icones et fonds)
-Description: Extension du theme PRIV OS pour LumenBoard : messageries, Proton, finance, apps Apple et utilitaires. Fonds nuit et classique. Calendrier sans date figee. Application et modules conserves.
+Name: PRIV OS LAB 0.5.4 (Fonds dans Photos)
+Description: Galerie native Fonds d'ecran dans PRIV Control : apercus PRIV Nuit et Classique, enregistrement explicite dans Photos. Theme LumenBoard de 53 applications conserve, modules et format du coffre conserves.

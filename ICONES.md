@@ -1,11 +1,11 @@
-# Icônes et fonds PRIV OS — version 0.5.3
+# Icônes et fonds PRIV OS — version 0.5.4
 
-La mise à jour **PRIV OS LAB 0.5.3 (icônes et fonds)** complète le thème déjà utilisé avec **LumenBoard**. Elle contient **53 identifiants d'applications**, dont PRIV Control. Le nom du thème reste **PRIV OS 0.5**, afin de conserver la sélection existante.
+La mise à jour **PRIV OS LAB 0.5.4 (Fonds dans Photos)** conserve le thème enrichi en 0.5.3, déjà utilisé avec **LumenBoard**, et rend les fonds accessibles dans l'app. Elle contient **53 identifiants d'applications**, dont PRIV Control. Le nom du thème reste **PRIV OS 0.5**, afin de conserver la sélection existante.
 
 ## Mettre à jour les icônes
 
 1. Dans **Sileo → Sources**, actualiser le dépôt PRIV OS déjà présent.
-2. Installer la mise à jour **PRIV OS LAB 0.5.3**.
+2. Installer la mise à jour **PRIV OS LAB 0.5.4**.
 3. Ouvrir **LumenBoard**, sélectionner le thème **PRIV OS 0.5**, puis **Apply**.
 4. Si quelques anciennes icônes persistent, utiliser une fois **LumenBoard → Settings → Clear icon cache & respring**, puis vérifier le résultat.
 
@@ -25,7 +25,9 @@ Le thème ne télécharge pas ces applications. Une application absente du thèm
 
 ## Appliquer le fond d'écran
 
-Les fonds peuvent être ouverts directement depuis le dépôt :
+Après la mise à jour, fermer complètement **PRIV Control**, la rouvrir et toucher **Fonds d'écran → Enregistrer dans Photos**. Autoriser l'ajout si iOS le demande, attendre la confirmation, puis toucher **Ouvrir Photos**. Ouvrir l'image et choisir **Partager → Utiliser en fond d'écran**. [Guide et dépannage](FONDS.md).
+
+Les fonds peuvent aussi être ouverts directement depuis le dépôt :
 
 - [Fond PRIV Nuit](https://raw.githubusercontent.com/r1lad-ui/privos-sileo/main/wallpapers/PRIV-Wallpaper-Night.png)
 - [Fond PRIV Classique](https://raw.githubusercontent.com/r1lad-ui/privos-sileo/main/wallpapers/PRIV-Wallpaper-Classic.png)
@@ -36,6 +38,6 @@ Les deux fichiers sont aussi installés dans `/var/jb/usr/share/privos/wallpaper
 
 ## Validation et limites
 
-Les fichiers PNG, les identifiants, l'intégrité du paquet et les sommes de contrôle du dépôt sont vérifiés avant publication. Le code de PRIV Control, les fichiers de son application, les modules du Centre de contrôle et les scripts d'installation de la 0.5.2 sont conservés à l'identique. Le rendu sur l'iPhone reste à confirmer après **Apply**.
+Les fichiers PNG, les identifiants, l'intégrité du paquet et les sommes de contrôle du dépôt sont vérifiés avant publication. La version 0.5.4 reconstruit PRIV Control pour ajouter la galerie ; le code du coffre, de l'import privé et du verrouillage est conservé. Le thème, les modules du Centre de contrôle et les scripts d'installation de la 0.5.3 restent identiques. Le rendu sur l'iPhone et l'autorisation Photos restent à confirmer sur l'appareil.
 
 Sources techniques : [LumenBoard](https://github.com/xsxs18-dev/LumenBoard), [identifiants Apple](https://support.apple.com/guide/deployment/bundle-ids-for-iphone-and-ipad-apple-apps-depece748c41/web). Le relevé des identifiants et des sources est conservé dans `assets/icons/verified-identifiers.json`.

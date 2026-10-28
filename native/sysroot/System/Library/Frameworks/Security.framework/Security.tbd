@@ -1,0 +1,11 @@
+--- !tapi-tbd
+tbd-version: 4
+targets: [ arm64-ios ]
+install-name: /System/Library/Frameworks/Security.framework/Security
+exports:
+  - targets: [ arm64-ios ]
+    symbols: [ _SecItemAdd, _SecItemCopyMatching, _SecItemUpdate, _SecItemDelete, _SecRandomCopyBytes,
+      _kSecClass, _kSecClassGenericPassword, _kSecAttrService, _kSecAttrAccount, _kSecAttrAccessible,
+      _kSecAttrAccessibleWhenUnlockedThisDeviceOnly, _kSecValueData, _kSecReturnData,
+      _kSecMatchLimit, _kSecMatchLimitOne ]
+...
