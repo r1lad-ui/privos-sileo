@@ -27,12 +27,12 @@ static UIButton *PKButton(NSString *title,NSString *icon,BOOL prominent,id targe
     cfg.contentInsets=NSDirectionalEdgeInsetsMake(11,12,11,12);
     UIButton *b=[UIButton buttonWithConfiguration:cfg primaryAction:nil];
     [b addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-    [b.heightAnchor constraintGreaterThanOrEqualToConstant:44].active=YES;return b;
+    NSLayoutConstraint *height=[b.heightAnchor constraintGreaterThanOrEqualToConstant:44];height.priority=999;height.active=YES;return b;
 }
 static UITextField *PKField(NSString *placeholder){
     UITextField *f=[UITextField new];f.placeholder=placeholder;f.keyboardType=UIKeyboardTypeDecimalPad;
     f.borderStyle=UITextBorderStyleRoundedRect;f.backgroundColor=PKCard();f.textColor=UIColor.whiteColor;
-    f.font=[UIFont monospacedDigitSystemFontOfSize:15 weight:UIFontWeightMedium];[f.heightAnchor constraintEqualToConstant:44].active=YES;
+    f.font=[UIFont monospacedDigitSystemFontOfSize:15 weight:UIFontWeightMedium];NSLayoutConstraint *height=[f.heightAnchor constraintEqualToConstant:44];height.priority=999;height.active=YES;
     return f;
 }
 static BOOL PKReadNumber(NSString *text,double min,double max,double *out){
@@ -141,6 +141,24 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
 - (void)save{CGFloat scale=self.slider.value/40;[[NSUserDefaults standardUserDefaults]setDouble:scale forKey:@"screenPointsPerMM"];void(^done)(CGFloat)=self.completed;[self dismissViewControllerAnimated:YES completion:^{if(done)done(scale);}];}
 @end
 
+@interface PKFullscreenController : UIViewController
+@property(nonatomic,strong) PKCanvasView *canvas;
+@property(nonatomic,copy) NSString *instructions;
+@property(nonatomic,copy) void(^completed)(void);
+@end
+@implementation PKFullscreenController
+- (void)viewDidLoad{
+    [super viewDidLoad];self.view.backgroundColor=PKBackground();
+    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithTitle:@"Cadrer" style:UIBarButtonItemStylePlain target:self action:@selector(fit)];
+    UILabel *hint=PKLabel(self.instructions,13,NO);hint.textColor=PKMuted();hint.translatesAutoresizingMaskIntoConstraints=NO;[self.view addSubview:hint];
+    self.canvas.translatesAutoresizingMaskIntoConstraints=NO;[self.view addSubview:self.canvas];
+    [NSLayoutConstraint activateConstraints:@[[hint.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor constant:8],[hint.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:16],[hint.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-16],[self.canvas.topAnchor constraintEqualToAnchor:hint.bottomAnchor constant:10],[self.canvas.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:8],[self.canvas.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-8],[self.canvas.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor constant:-8]]];
+}
+- (void)fit{[self.canvas resetViewport];}
+- (void)done{void(^completion)(void)=self.completed;[self dismissViewControllerAnimated:YES completion:^{if(completion)completion();}];}
+@end
+
 @interface PKRootController : UIViewController<PHPickerViewControllerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIDocumentPickerDelegate,UITextFieldDelegate>
 @property(nonatomic,strong) PKDocument *doc;
 @property(nonatomic,strong) PKCanvasView *canvas;
@@ -148,6 +166,13 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
 @property(nonatomic,strong) UITextField *reference,*thickness,*xField,*yField;
 @property(nonatomic,strong) UISegmentedControl *modes;
 @property(nonatomic,strong) UIButton *closeButton,*undoButton,*redoButton;
+@property(nonatomic,strong) UIButton *referenceButton,*referenceFlipButton,*copyGuideButton,*deleteGuideButton;
+@property(nonatomic,strong) UILabel *referenceHelp,*guideSelection;
+@property(nonatomic,strong) UITextField *guideXField,*guideYField;
+@property(nonatomic,strong) UISegmentedControl *guideModes;
+@property(nonatomic,strong) UIStackView *referenceControls,*guideControls,*guideCoordinates,*contourControls;
+@property(nonatomic,strong) UIStackView *workStack;
+@property(nonatomic,strong) NSLayoutConstraint *canvasHeight;
 @property(nonatomic,strong) NSMutableArray<NSDictionary *> *undoStates,*redoStates;
 @property(nonatomic) BOOL dirty;
 @property(nonatomic,strong) NSMutableArray<NSURL *> *temporaryExports;
@@ -157,18 +182,28 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     [super viewDidLoad];self.title=@"PRIV Key";self.view.backgroundColor=PKBackground();self.view.tintColor=PKAccent();
     self.doc=[PKDocument demoDocument];self.undoStates=[NSMutableArray array];self.redoStates=[NSMutableArray array];self.temporaryExports=[NSMutableArray array];
     self.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"folder"] style:UIBarButtonItemStylePlain target:self action:@selector(files)];
-    self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"questionmark.circle"] style:UIBarButtonItemStylePlain target:self action:@selector(help)];
+    UIBarButtonItem *help=[[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"questionmark.circle"] style:UIBarButtonItemStylePlain target:self action:@selector(help)];
+    UIBarButtonItem *expand=[[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"arrow.up.left.and.arrow.down.right"] style:UIBarButtonItemStylePlain target:self action:@selector(fullscreen)];expand.accessibilityLabel=@"Éditer la photo en plein écran";self.navigationItem.rightBarButtonItems=@[help,expand];
     UIScrollView *scroll=[UIScrollView new];scroll.translatesAutoresizingMaskIntoConstraints=NO;scroll.keyboardDismissMode=UIScrollViewKeyboardDismissModeOnDrag;[self.view addSubview:scroll];
     [NSLayoutConstraint activateConstraints:@[[scroll.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],[scroll.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],[scroll.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],[scroll.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor]]];
-    UILabel *eyebrow=PKLabel(@"RELEVÉ MANUEL · 0.1.1",11,YES);eyebrow.textColor=PKAccent();
-    UILabel *headline=PKLabel(@"Du contour au modèle.",26,YES);
+    NSString *version=[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"]?:@"0.2.0";
+    UILabel *eyebrow=PKLabel([@"ATELIER PHOTO · " stringByAppendingString:version],11,YES);eyebrow.textColor=PKAccent();
+    UILabel *headline=PKLabel(@"Une référence. Des traits.",25,YES);
     self.summary=PKLabel(@"",14,NO);self.summary.textColor=PKMuted();
     UIButton *source=PKButton(@"Photo / nouveau",@"plus.viewfinder",NO,self,@selector(sourceMenu));
     UIButton *save=PKButton(@"Enregistrer",@"square.and.arrow.down",NO,self,@selector(saveDocument));
     UIStackView *sourceRow=PKStack(@[source,save],YES,8);sourceRow.distribution=UIStackViewDistributionFillEqually;
-    self.modes=[[UISegmentedControl alloc]initWithItems:@[@"1. Échelle",@"2. Contour",@"3. Ajuster"]];self.modes.selectedSegmentIndex=2;self.modes.selectedSegmentTintColor=PKAccent();[self.modes setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColor.whiteColor} forState:UIControlStateNormal];[self.modes setTitleTextAttributes:@{NSForegroundColorAttributeName:PKBackground()} forState:UIControlStateSelected];[self.modes addTarget:self action:@selector(modeChanged) forControlEvents:UIControlEventValueChanged];[self.modes.heightAnchor constraintEqualToConstant:36].active=YES;
+    self.modes=[[UISegmentedControl alloc]initWithItems:@[@"Référence",@"Traits",@"Contour",@"Ajuster"]];self.modes.selectedSegmentIndex=1;self.modes.selectedSegmentTintColor=PKAccent();[self.modes setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColor.whiteColor,NSFontAttributeName:[UIFont systemFontOfSize:12 weight:UIFontWeightMedium]} forState:UIControlStateNormal];[self.modes setTitleTextAttributes:@{NSForegroundColorAttributeName:PKBackground()} forState:UIControlStateSelected];[self.modes addTarget:self action:@selector(modeChanged) forControlEvents:UIControlEventValueChanged];NSLayoutConstraint *modesHeight=[self.modes.heightAnchor constraintEqualToConstant:36];modesHeight.priority=999;modesHeight.active=YES;
+    self.referenceButton=PKButton(@"Choisir une référence",@"creditcard",NO,self,@selector(referenceMenu));
+    self.referenceFlipButton=PKButton(@"Inverser la carte",@"arrow.triangle.2.circlepath",NO,self,@selector(flipReference));
+    UIButton *resetReference=PKButton(@"Replacer A–B",@"scope",NO,self,@selector(resetReference));
+    UIStackView *referenceActions=PKStack(@[self.referenceFlipButton,resetReference],YES,8);referenceActions.distribution=UIStackViewDistributionFillEqually;
+    self.referenceHelp=PKLabel(@"",13,NO);self.referenceHelp.textColor=PKMuted();
+    self.referenceControls=PKStack(@[self.referenceButton,self.referenceHelp,referenceActions],NO,8);
+    self.guideModes=[[UISegmentedControl alloc]initWithItems:@[@"1. Axe O–X",@"2. Placer les traits"]];self.guideModes.selectedSegmentIndex=1;self.guideModes.selectedSegmentTintColor=PKAccent();[self.guideModes setTitleTextAttributes:@{NSForegroundColorAttributeName:UIColor.whiteColor} forState:UIControlStateNormal];[self.guideModes setTitleTextAttributes:@{NSForegroundColorAttributeName:PKBackground()} forState:UIControlStateSelected];[self.guideModes addTarget:self action:@selector(guideModeChanged) forControlEvents:UIControlEventValueChanged];NSLayoutConstraint *guideModesHeight=[self.guideModes.heightAnchor constraintEqualToConstant:36];guideModesHeight.priority=999;guideModesHeight.active=YES;
+    self.guideControls=PKStack(@[self.guideModes],NO,8);
     self.hint=PKLabel(@"",13,NO);self.hint.textColor=PKMuted();
-    self.canvas=[PKCanvasView new];self.canvas.layer.cornerRadius=16;self.canvas.clipsToBounds=YES;[self.canvas.heightAnchor constraintEqualToConstant:310].active=YES;
+    self.canvas=[PKCanvasView new];self.canvas.layer.cornerRadius=16;self.canvas.clipsToBounds=YES;self.canvasHeight=[self.canvas.heightAnchor constraintEqualToConstant:310];self.canvasHeight.active=YES;
     __weak typeof(self) weakSelf=self;
     self.canvas.onGestureBegan=^{[weakSelf snapshot];};
     self.canvas.onChange=^{[weakSelf canvasChanged];};
@@ -182,72 +217,144 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     UIStackView *referenceColumn=PKStack(@[PKLabel(@"A–B réels (mm)",12,YES),self.reference],NO,6);
     UIStackView *thicknessColumn=PKStack(@[PKLabel(@"Épaisseur (mm)",12,YES),self.thickness],NO,6);
     UIStackView *measures=PKStack(@[referenceColumn,thicknessColumn],YES,10);measures.distribution=UIStackViewDistributionFillEqually;
+    self.guideSelection=PKLabel(@"",13,YES);self.guideSelection.font=[UIFont monospacedDigitSystemFontOfSize:13 weight:UIFontWeightMedium];
+    self.guideXField=PKField(@"X (mm)");self.guideYField=PKField(@"Y (mm)");self.guideXField.keyboardType=self.guideYField.keyboardType=UIKeyboardTypeNumbersAndPunctuation;
+    self.guideXField.accessibilityLabel=@"Distance du trait le long de l’axe O–X, en millimètres";self.guideYField.accessibilityLabel=@"Distance signée du point à l’axe, en millimètres";
+    UIButton *moveGuide=PKButton(@"Déplacer",nil,NO,self,@selector(moveGuide));UIStackView *guideFields=PKStack(@[self.guideXField,self.guideYField,moveGuide],YES,8);guideFields.distribution=UIStackViewDistributionFillEqually;
+    self.copyGuideButton=PKButton(@"Copier ce point dans le contour",@"plus.circle",NO,self,@selector(copyGuideToContour));
+    self.deleteGuideButton=PKButton(@"Retirer le trait sélectionné",@"minus.circle",NO,self,@selector(deleteGuide));
+    self.guideCoordinates=PKStack(@[self.guideSelection,guideFields,self.copyGuideButton,self.deleteGuideButton],NO,8);
     self.selection=PKLabel(@"",13,YES);self.xField=PKField(@"X");self.yField=PKField(@"Y");self.xField.accessibilityLabel=@"Abscisse du point depuis le bord gauche, en millimètres";self.yField.accessibilityLabel=@"Ordonnée du point depuis le bord haut, en millimètres";
     UIButton *move=PKButton(@"Déplacer",nil,NO,self,@selector(movePoint));UIStackView *coordinates=PKStack(@[self.xField,self.yField,move],YES,8);coordinates.distribution=UIStackViewDistributionFillEqually;
     self.closeButton=PKButton(@"Fermer le contour",@"checkmark.seal",NO,self,@selector(toggleClosed));
     UIButton *delete=PKButton(@"Retirer le point",@"minus.circle",NO,self,@selector(deletePoint));UIStackView *edit=PKStack(@[self.closeButton,delete],YES,8);edit.distribution=UIStackViewDistributionFillEqually;
+    self.contourControls=PKStack(@[self.selection,coordinates,edit],NO,8);
     self.dimensions=PKLabel(@"",15,YES);self.dimensions.font=[UIFont monospacedDigitSystemFontOfSize:15 weight:UIFontWeightMedium];
     UIButton *preview=PKButton(@"Voir en 3D",@"cube.transparent",NO,self,@selector(preview));UIButton *realSize=PKButton(@"Échelle écran",@"ruler",NO,self,@selector(physicalScale));UIStackView *previewRow=PKStack(@[preview,realSize],YES,8);previewRow.distribution=UIStackViewDistributionFillEqually;
     UIButton *export=PKButton(@"Exporter le relevé",@"square.and.arrow.up",YES,self,@selector(exportMenu));
     UILabel *limit=PKLabel(@"Le modèle restitue le contour et une épaisseur constante. Les rainures, profils latéraux et la précision de fabrication restent à vérifier.",13,NO);limit.textColor=PKMuted();
     self.privacy=PKLabel(@"Traitement sur l’iPhone. Aucun envoi réseau.\nEnregistre le relevé pour le conserver après fermeture.",12,NO);self.privacy.textColor=PKMuted();
-    UIStackView *stack=PKStack(@[eyebrow,headline,self.summary,sourceRow,self.modes,self.hint,self.canvas,history,measures,apply,self.selection,coordinates,edit,self.dimensions,previewRow,export,limit,self.privacy],NO,13);
+    UIStackView *stack=PKStack(@[eyebrow,headline,self.summary,sourceRow,self.modes,self.referenceControls,self.guideControls,self.hint,self.canvas,history,self.guideCoordinates,measures,apply,self.contourControls,self.dimensions,previewRow,export,limit,self.privacy],NO,13);
+    self.workStack=stack;
     stack.translatesAutoresizingMaskIntoConstraints=NO;[scroll addSubview:stack];
     [NSLayoutConstraint activateConstraints:@[[stack.topAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.topAnchor constant:18],[stack.bottomAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.bottomAnchor constant:-24],[stack.leadingAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.leadingAnchor constant:16],[stack.trailingAnchor constraintEqualToAnchor:scroll.contentLayoutGuide.trailingAnchor constant:-16],[stack.widthAnchor constraintEqualToAnchor:scroll.frameLayoutGuide.widthAnchor constant:-32]]];
     UIToolbar *keyboard=[UIToolbar new];[keyboard sizeToFit];keyboard.items=@[[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],[[UIBarButtonItem alloc]initWithTitle:@"Terminé" style:UIBarButtonItemStyleDone target:self action:@selector(endEditing)]];
-    for(UITextField *f in @[self.reference,self.thickness,self.xField,self.yField]){f.inputAccessoryView=keyboard;f.delegate=self;}
+    for(UITextField *f in @[self.reference,self.thickness,self.xField,self.yField,self.guideXField,self.guideYField]){f.inputAccessoryView=keyboard;f.delegate=self;}
     [self bindDocument];[self cleanupOldExports];
 }
 - (void)endEditing{[self.view endEditing:YES];}
 - (void)bindDocument{
-    self.canvas.referenceImage=self.doc.image;self.canvas.documentSize=self.doc.documentSize;self.canvas.points=self.doc.points;self.canvas.calibrationPoints=self.doc.calibrationPoints;self.canvas.closed=self.doc.closed;self.canvas.selectedIndex=-1;self.canvas.mode=(PKCanvasMode)self.modes.selectedSegmentIndex;
+    self.canvas.referenceImage=self.doc.image;self.canvas.documentSize=self.doc.documentSize;self.canvas.points=self.doc.points;self.canvas.calibrationPoints=self.doc.calibrationPoints;self.canvas.closed=self.doc.closed;self.canvas.selectedIndex=-1;
+    self.canvas.guideAxisPoints=self.doc.guideAxisPoints;self.canvas.guidePoints=self.doc.guidePoints;self.canvas.selectedGuideIndex=-1;self.guideModes.selectedSegmentIndex=self.doc.hasValidGuideAxis?1:0;[self updateCanvasMode];
     self.reference.text=[NSString stringWithFormat:@"%.12g",self.doc.referenceMillimeters];self.thickness.text=[NSString stringWithFormat:@"%.12g",self.doc.thicknessMillimeters];[self.canvas resetViewport];[self refresh];
 }
 - (void)refresh{
-    self.summary.text=[NSString stringWithFormat:@"%@ · %lu points%@",self.doc.name,(unsigned long)self.doc.points.count,self.dirty?@" · modifié":@""];
+    self.summary.text=[NSString stringWithFormat:@"%@ · %lu points · %lu traits%@",self.doc.name,(unsigned long)self.doc.points.count,(unsigned long)self.doc.guidePoints.count,self.dirty?@" · modifié":@""];
     NSString *hints[]={
-        @"Place A et B sur deux repères d’une distance connue, dans le même plan que la clé. Une règle graduée dans la photo convient.",
+        @"Aligne A et B sur la référence. Photo de face, référence à la même hauteur que le contour. Pince pour zoomer ; la perspective n’est pas corrigée.",
+        @"Place O au départ de l’axe et X dans sa direction. Puis passe sur Placer les traits. Deux doigts déplacent la vue.",
         @"Touche le contour pour ajouter un point. Place les points dans l’ordre, puis ferme le contour. Deux doigts pour déplacer, pince pour zoomer.",
         @"Touche un point, puis glisse-le ou saisis ses coordonnées. Deux doigts pour déplacer la vue, pince pour zoomer."
     };
     self.hint.text=hints[self.modes.selectedSegmentIndex];
+    if(self.modes.selectedSegmentIndex==1&&self.guideModes.selectedSegmentIndex==1)self.hint.text=self.doc.hasValidGuideAxis?@"Touche la photo pour placer un trait, puis glisse son point. X suit l’axe ; Y mesure l’écart signé. La loupe apparaît pendant le déplacement.":@"Définis d’abord les deux points O et X dans Axe O–X.";
+    self.referenceControls.hidden=self.modes.selectedSegmentIndex!=0;self.guideControls.hidden=self.modes.selectedSegmentIndex!=1;self.guideCoordinates.hidden=self.modes.selectedSegmentIndex!=1;self.contourControls.hidden=self.modes.selectedSegmentIndex<2;
+    BOOL card=[self.doc.referenceKind hasPrefix:@"card-"];self.referenceFlipButton.hidden=!card;
+    UIButtonConfiguration *referenceCfg=[self.referenceButton.configuration copy];referenceCfg.title=[PKDocument titleForReferenceKind:self.doc.referenceKind];referenceCfg.image=[UIImage systemImageNamed:card?@"creditcard":([self.doc.referenceKind hasPrefix:@"coin-"]?@"circle":@"ruler")];self.referenceButton.configuration=referenceCfg;
+    self.reference.enabled=[self.doc.referenceKind isEqualToString:@"custom"];
+    if(card)self.referenceHelp.text=[NSString stringWithFormat:@"Carte ID-1 : 85,60 × 53,98 mm. Aligne le %@ côté A–B. Place les repères à l’intersection des prolongements des bords droits, comme si les coins n’étaient pas arrondis.",[self.doc.referenceKind isEqualToString:@"card-long"]?@"grand":@"petit"];
+    else if([self.doc.referenceKind hasPrefix:@"coin-"])self.referenceHelp.text=[NSString stringWithFormat:@"Diamètre : %.2f mm. Place A et B sur deux bords opposés en passant par le centre ; le cercle doit suivre le bord de la pièce.",self.doc.referenceMillimeters];
+    else self.referenceHelp.text=@"Place A et B sur une longueur connue, puis saisis sa mesure réelle en millimètres et applique-la.";
+    self.canvas.referenceKind=self.doc.referenceKind;self.canvas.referenceFlipped=self.doc.referenceFlipped;self.canvas.millimetersPerUnit=self.doc.millimetersPerUnit;
     self.undoButton.enabled=self.undoStates.count>0;self.redoButton.enabled=self.redoStates.count>0;
     UIButtonConfiguration *cfg=[self.closeButton.configuration copy];cfg.title=self.doc.closed?@"Rouvrir":@"Fermer";self.closeButton.configuration=cfg;
-    NSInteger index=self.canvas.selectedIndex;double scale=self.doc.millimetersPerUnit;BOOL selected=index>=0 && index<(NSInteger)self.doc.points.count && self.modes.selectedSegmentIndex!=0;
+    NSInteger index=self.canvas.selectedIndex;double scale=self.doc.millimetersPerUnit;BOOL selected=index>=0 && index<(NSInteger)self.doc.points.count && self.modes.selectedSegmentIndex>=2;
     self.selection.text=selected?[NSString stringWithFormat:@"Point %ld · X / Y depuis le bord de l’image (mm)",(long)index+1]:@"Sélectionne un point du contour pour le déplacer.";
     self.xField.enabled=self.yField.enabled=selected && scale>0;
     if(selected&&scale>0){CGPoint p=self.doc.points[index].CGPointValue;if(!self.xField.isFirstResponder)self.xField.text=[NSString stringWithFormat:@"%.3f",p.x*scale];if(!self.yField.isFirstResponder)self.yField.text=[NSString stringWithFormat:@"%.3f",p.y*scale];}
     else {self.xField.text=@"";self.yField.text=@"";}
+    NSInteger guide=self.canvas.selectedGuideIndex;BOOL guideSelected=guide>=0&&guide<(NSInteger)self.doc.guidePoints.count;
+    self.deleteGuideButton.enabled=guideSelected;self.copyGuideButton.enabled=guideSelected;
+    self.guideXField.enabled=self.guideYField.enabled=guideSelected&&self.doc.hasValidGuideAxis&&scale>0;
+    if(guideSelected&&self.doc.hasValidGuideAxis&&scale>0){CGPoint p=[self.doc guideCoordinatesForPoint:self.doc.guidePoints[guide].CGPointValue];self.guideSelection.text=[NSString stringWithFormat:@"Trait %ld · X %.3f / Y %+.3f mm\nOrigine O · direction X · côté signé de l’axe",(long)guide+1,p.x,p.y];if(!self.guideXField.isFirstResponder)self.guideXField.text=[NSString stringWithFormat:@"%.4f",p.x];if(!self.guideYField.isFirstResponder)self.guideYField.text=[NSString stringWithFormat:@"%.4f",p.y];}
+    else{self.guideXField.text=@"";self.guideYField.text=@"";self.guideSelection.text=!(scale>0)?@"Étalonne la référence pour afficher les mesures en mm.":(self.doc.closed?@"Sélectionne un trait. Rouvre le contour pour y copier des points.":@"Sélectionne un trait pour lire ou régler ses distances en mm.");}
     PKPoint points[256];NSString *error=nil;
     if([self.doc copyMillimeterPoints:points error:&error]){PKBounds b;pk_bounds(points,self.doc.points.count,&b);self.dimensions.text=[NSString stringWithFormat:@"%.2f × %.2f × %.2f mm\nContour valide · %.2f mm²",b.max_x-b.min_x,b.max_y-b.min_y,self.doc.thicknessMillimeters,fabs(pk_area(points,self.doc.points.count))];self.dimensions.textColor=PKAccent();}
     else {self.dimensions.text=error;self.dimensions.textColor=PKMuted();}
     [self.canvas setNeedsDisplay];
 }
 - (NSDictionary *)state{
-    return @{@"points":[self.doc.points copy],@"calibration":[self.doc.calibrationPoints copy],@"reference":@(self.doc.referenceMillimeters),@"thickness":@(self.doc.thicknessMillimeters),@"closed":@(self.doc.closed)};
+    return @{@"points":[self.doc.points copy],@"calibration":[self.doc.calibrationPoints copy],@"reference":@(self.doc.referenceMillimeters),@"referenceKind":self.doc.referenceKind,@"referenceFlipped":@(self.doc.referenceFlipped),@"guideAxis":[self.doc.guideAxisPoints copy],@"guides":[self.doc.guidePoints copy],@"thickness":@(self.doc.thicknessMillimeters),@"closed":@(self.doc.closed)};
 }
 - (void)snapshot{[self.undoStates addObject:[self state]];if(self.undoStates.count>60)[self.undoStates removeObjectAtIndex:0];[self.redoStates removeAllObjects];self.dirty=YES;}
 - (void)restore:(NSDictionary *)state{
-    self.doc.points=[state[@"points"] mutableCopy];self.doc.calibrationPoints=[state[@"calibration"] mutableCopy];self.doc.referenceMillimeters=[state[@"reference"]doubleValue];self.doc.thicknessMillimeters=[state[@"thickness"]doubleValue];self.doc.closed=[state[@"closed"]boolValue];self.dirty=YES;
-    self.canvas.points=self.doc.points;self.canvas.calibrationPoints=self.doc.calibrationPoints;self.canvas.closed=self.doc.closed;self.canvas.selectedIndex=-1;self.reference.text=[NSString stringWithFormat:@"%.12g",self.doc.referenceMillimeters];self.thickness.text=[NSString stringWithFormat:@"%.12g",self.doc.thicknessMillimeters];[self.canvas resetViewport];[self refresh];
+    self.doc.points=[state[@"points"] mutableCopy];self.doc.calibrationPoints=[state[@"calibration"] mutableCopy];self.doc.referenceKind=state[@"referenceKind"]?:@"custom";self.doc.referenceMillimeters=[state[@"reference"]doubleValue];self.doc.referenceFlipped=[state[@"referenceFlipped"]boolValue];self.doc.guideAxisPoints=[state[@"guideAxis"] mutableCopy]?:[NSMutableArray array];self.doc.guidePoints=[state[@"guides"] mutableCopy]?:[NSMutableArray array];self.doc.thicknessMillimeters=[state[@"thickness"]doubleValue];self.doc.closed=[state[@"closed"]boolValue];self.dirty=YES;
+    [self bindDocument];
 }
 - (void)undo{if(!self.undoStates.count)return;[self.redoStates addObject:[self state]];NSDictionary *s=self.undoStates.lastObject;[self.undoStates removeLastObject];[self restore:s];}
 - (void)redo{if(!self.redoStates.count)return;[self.undoStates addObject:[self state]];NSDictionary *s=self.redoStates.lastObject;[self.redoStates removeLastObject];[self restore:s];}
-- (void)canvasChanged{self.doc.closed=self.canvas.closed;[self refresh];}
-- (void)modeChanged{[self endEditing];self.canvas.mode=(PKCanvasMode)self.modes.selectedSegmentIndex;self.canvas.selectedIndex=-1;if(self.modes.selectedSegmentIndex==0)[self.canvas resetViewport];[self refresh];}
+- (void)canvasChanged{[self endEditing];self.doc.closed=self.canvas.closed;[self refresh];}
+- (void)updateCanvasMode{
+    switch(self.modes.selectedSegmentIndex){
+        case 0:self.canvas.mode=PKCanvasModeCalibration;break;
+        case 1:self.canvas.mode=self.guideModes.selectedSegmentIndex==0?PKCanvasModeGuideAxis:PKCanvasModeGuides;break;
+        case 2:self.canvas.mode=PKCanvasModeTrace;break;
+        default:self.canvas.mode=PKCanvasModeAdjust;break;
+    }
+}
+- (void)modeChanged{[self endEditing];if(self.modes.selectedSegmentIndex==1&&!self.doc.hasValidGuideAxis)self.guideModes.selectedSegmentIndex=0;[self updateCanvasMode];self.canvas.selectedIndex=-1;self.canvas.selectedGuideIndex=-1;if(self.modes.selectedSegmentIndex==0)[self.canvas resetViewport];[self refresh];}
+- (void)guideModeChanged{[self endEditing];[self updateCanvasMode];[self refresh];}
 - (void)fit{[self.canvas resetViewport];}
+- (void)fullscreen{
+    [self endEditing];NSUInteger index=[self.workStack.arrangedSubviews indexOfObject:self.canvas];if(index==NSNotFound)return;
+    [self.workStack removeArrangedSubview:self.canvas];[self.canvas removeFromSuperview];self.canvasHeight.active=NO;
+    PKFullscreenController *editor=[PKFullscreenController new];editor.canvas=self.canvas;editor.title=[self.modes titleForSegmentAtIndex:self.modes.selectedSegmentIndex];editor.instructions=self.hint.text;
+    __weak typeof(self) weakSelf=self;editor.completed=^{typeof(self) self=weakSelf;if(!self)return;[self.canvas removeFromSuperview];[self.workStack insertArrangedSubview:self.canvas atIndex:MIN(index,self.workStack.arrangedSubviews.count)];self.canvasHeight.active=YES;[self refresh];};
+    UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:editor];nav.modalPresentationStyle=UIModalPresentationFullScreen;nav.modalInPresentation=YES;[self presentViewController:nav animated:YES completion:nil];
+}
+- (void)referenceMenu{
+    [self endEditing];UIAlertController *menu=[UIAlertController alertControllerWithTitle:@"Référence dans la photo" message:@"Choisis l’objet réellement présent. Le changement efface les anciens repères A–B ; le contour et les traits restent en place." preferredStyle:UIAlertControllerStyleActionSheet];
+    for(NSString *kind in @[@"card-long",@"card-short",@"coin-1",@"coin-2",@"coin-50",@"custom"]){double length=[PKDocument millimetersForReferenceKind:kind];NSString *title=[PKDocument titleForReferenceKind:kind];if(length>0)title=[title stringByAppendingFormat:@" · %.2f mm",length];[menu addAction:[UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){[self chooseReferenceKind:kind];}]];}
+    [menu addAction:[UIAlertAction actionWithTitle:@"Annuler" style:UIAlertActionStyleCancel handler:nil]];PKPopover(menu,self);[self presentViewController:menu animated:YES completion:nil];
+}
+- (void)chooseReferenceKind:(NSString *)kind{
+    if([kind isEqualToString:self.doc.referenceKind])return;
+    [self snapshot];self.doc.referenceKind=kind;self.doc.referenceFlipped=NO;[self.doc.calibrationPoints removeAllObjects];self.canvas.calibrationPoints=self.doc.calibrationPoints;self.reference.text=[NSString stringWithFormat:@"%.12g",self.doc.referenceMillimeters];self.modes.selectedSegmentIndex=0;[self updateCanvasMode];[self.canvas resetViewport];[self refresh];
+}
+- (void)flipReference{if(![self.doc.referenceKind hasPrefix:@"card-"])return;[self snapshot];self.doc.referenceFlipped=!self.doc.referenceFlipped;[self refresh];}
+- (void)resetReference{if(!self.doc.calibrationPoints.count)return;[self snapshot];[self.doc.calibrationPoints removeAllObjects];self.canvas.calibrationPoints=self.doc.calibrationPoints;[self.canvas resetViewport];[self refresh];}
+- (void)moveGuide{
+    NSInteger i=self.canvas.selectedGuideIndex;double scale=self.doc.millimetersPerUnit,x=0,y=0;
+    if(i<0||i>=(NSInteger)self.doc.guidePoints.count||!self.doc.hasValidGuideAxis||!(scale>0)){PKMessage(self,@"Trait requis",@"Étalonne la référence, définis O et X, puis sélectionne un trait.");return;}
+    double limit=hypot(self.doc.documentSize.width,self.doc.documentSize.height)*scale;
+    if(!PKReadNumber(self.guideXField.text,-limit,limit,&x)||!PKReadNumber(self.guideYField.text,-limit,limit,&y)){PKMessage(self,@"Distances invalides",@"Saisis des distances signées en millimètres, dans les limites de l’image.");return;}
+    CGPoint o=self.doc.guideAxisPoints[0].CGPointValue,b=self.doc.guideAxisPoints[1].CGPointValue;double length=hypot(b.x-o.x,b.y-o.y),ux=(b.x-o.x)/length,uy=(b.y-o.y)/length;
+    CGPoint point=CGPointMake(o.x+(x*ux-y*uy)/scale,o.y+(x*uy+y*ux)/scale);
+    if(!isfinite(point.x)||!isfinite(point.y)||point.x<0||point.y<0||point.x>self.doc.documentSize.width||point.y>self.doc.documentSize.height){PKMessage(self,@"Point hors de la photo",@"Ces distances placent le point en dehors de l’image.");return;}
+    [self snapshot];self.doc.guidePoints[i]=[NSValue valueWithCGPoint:point];[self endEditing];[self refresh];
+}
+- (void)deleteGuide{NSInteger i=self.canvas.selectedGuideIndex;if(i<0||i>=(NSInteger)self.doc.guidePoints.count)return;[self snapshot];[self.doc.guidePoints removeObjectAtIndex:i];self.canvas.selectedGuideIndex=-1;[self refresh];}
+- (void)copyGuideToContour{
+    NSInteger i=self.canvas.selectedGuideIndex;if(i<0||i>=(NSInteger)self.doc.guidePoints.count)return;
+    if(self.doc.closed){PKMessage(self,@"Contour fermé",@"Dans Contour, touche Rouvrir avant de copier un nouveau point.");return;}
+    if(self.doc.points.count>=256){PKMessage(self,@"Contour complet",@"La limite est de 256 points.");return;}
+    CGPoint point=self.doc.guidePoints[i].CGPointValue;
+    for(NSValue *value in self.doc.points){CGPoint existing=value.CGPointValue;if(hypot(existing.x-point.x,existing.y-point.y)<0.001){PKMessage(self,@"Point déjà présent",@"Cette intersection figure déjà dans le contour.");return;}}
+    [self snapshot];[self.doc.points addObject:[NSValue valueWithCGPoint:point]];[self refresh];
+    self.guideSelection.text=[self.guideSelection.text stringByAppendingFormat:@"\nCopié comme point %lu. La copie se règle ensuite dans Ajuster.",(unsigned long)self.doc.points.count];UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification,@"Point copié dans le contour");
+}
 - (void)applyMeasurements{
     double reference=0,thickness=0;
     if(!PKReadNumber(self.reference.text,0.1,1000,&reference)||!PKReadNumber(self.thickness.text,0.1,20,&thickness)){PKMessage(self,@"Mesure invalide",@"Distance A–B : de 0,1 à 1 000 mm. Épaisseur : de 0,1 à 20 mm. Utilise tes mesures réelles.");return;}
     [self snapshot];self.doc.referenceMillimeters=reference;self.doc.thicknessMillimeters=thickness;self.dirty=YES;[self endEditing];[self.canvas resetViewport];[self refresh];
 }
 - (void)movePoint{
-    NSInteger i=self.canvas.selectedIndex;double scale=self.doc.millimetersPerUnit,x=0,y=0;if(i<0||i>=(NSInteger)self.doc.points.count||!(scale>0)){PKMessage(self,@"Point requis",@"Sélectionne un point du contour après avoir étalonné l’image.");return;}
+    NSInteger i=self.canvas.selectedIndex;double scale=self.doc.millimetersPerUnit,x=0,y=0;if(self.modes.selectedSegmentIndex<2||i<0||i>=(NSInteger)self.doc.points.count||!(scale>0)){PKMessage(self,@"Point requis",@"Sélectionne un point du contour après avoir étalonné l’image.");return;}
     if(!PKReadNumber(self.xField.text,0,self.doc.documentSize.width*scale,&x)||!PKReadNumber(self.yField.text,0,self.doc.documentSize.height*scale,&y)){PKMessage(self,@"Coordonnées invalides",@"Les coordonnées doivent rester dans l’image.");return;}
     [self snapshot];self.doc.points[i]=[NSValue valueWithCGPoint:CGPointMake(x/scale,y/scale)];self.dirty=YES;[self endEditing];[self refresh];
 }
 - (void)deletePoint{
-    NSInteger i=self.canvas.selectedIndex;if(self.modes.selectedSegmentIndex==0){PKMessage(self,@"Mode contour",@"Passe sur Contour ou Ajuster pour retirer un point.");return;}
+    NSInteger i=self.canvas.selectedIndex;if(self.modes.selectedSegmentIndex<2){PKMessage(self,@"Mode contour",@"Passe sur Contour ou Ajuster pour retirer un point.");return;}
     if(i<0||i>=(NSInteger)self.doc.points.count)return;[self snapshot];[self.doc.points removeObjectAtIndex:i];if(self.doc.points.count<3)self.doc.closed=self.canvas.closed=NO;self.canvas.selectedIndex=-1;self.dirty=YES;[self refresh];
 }
 - (void)toggleClosed{
@@ -255,7 +362,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     [self snapshot];self.doc.closed=!self.doc.closed;self.canvas.closed=self.doc.closed;self.dirty=YES;[self refresh];
 }
 - (void)replaceDocument:(PKDocument *)doc{
-    self.doc=doc;self.dirty=NO;[self.undoStates removeAllObjects];[self.redoStates removeAllObjects];self.modes.selectedSegmentIndex=doc.calibrationPoints.count==2?2:0;[self bindDocument];
+    self.doc=doc;self.dirty=NO;[self.undoStates removeAllObjects];[self.redoStates removeAllObjects];self.modes.selectedSegmentIndex=doc.millimetersPerUnit>0?(doc.guidePoints.count?1:3):0;[self bindDocument];
 }
 - (void)confirmReplacement:(void(^)(void))action{
     if(!self.dirty){action();return;}
@@ -264,7 +371,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     [a addAction:[UIAlertAction actionWithTitle:@"Remplacer" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *x){action();}]];[self presentViewController:a animated:YES completion:nil];
 }
 - (void)sourceMenu{
-    [self endEditing];UIAlertController *menu=[UIAlertController alertControllerWithTitle:@"Commencer un relevé" message:@"Une photo de face avec une règle dans le même plan permet un relevé manuel. La perspective n’est pas corrigée automatiquement." preferredStyle:UIAlertControllerStyleActionSheet];
+    [self endEditing];UIAlertController *menu=[UIAlertController alertControllerWithTitle:@"Commencer un relevé" message:@"Photographie de face une carte ID-1 en fond, une pièce en euros à côté, ou une règle. Place la référence à la même hauteur que le contour. La perspective n’est pas corrigée." preferredStyle:UIAlertControllerStyleActionSheet];
     [menu addAction:[UIAlertAction actionWithTitle:@"Choisir une photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){[self confirmReplacement:^{[self pickPhoto];}];}]];
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])[menu addAction:[UIAlertAction actionWithTitle:@"Prendre une photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){[self confirmReplacement:^{UIImagePickerController *picker=[UIImagePickerController new];picker.delegate=self;picker.sourceType=UIImagePickerControllerSourceTypeCamera;[self presentViewController:picker animated:YES completion:nil];}];}]];
     [menu addAction:[UIAlertAction actionWithTitle:@"Plan vierge" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){[self confirmReplacement:^{[self replaceDocument:[PKDocument new]];}];}]];
@@ -291,7 +398,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     UIGraphicsImageRendererFormat *format=[UIGraphicsImageRendererFormat defaultFormat];format.scale=1;format.opaque=YES;
     UIGraphicsImageRenderer *renderer=[[UIGraphicsImageRenderer alloc]initWithSize:size format:format];
     UIImage *normalized=[renderer imageWithActions:^(UIGraphicsImageRendererContext *context){[UIColor.whiteColor setFill];UIRectFill(CGRectMake(0,0,size.width,size.height));[image drawInRect:CGRectMake(0,0,size.width,size.height)];}];
-    PKDocument *doc=[PKDocument new];doc.name=@"Relevé photo";doc.image=normalized;doc.documentSize=size;[self replaceDocument:doc];self.dirty=YES;[self refresh];
+    PKDocument *doc=[PKDocument new];doc.name=@"Relevé photo";doc.image=normalized;doc.documentSize=size;doc.referenceKind=@"card-long";[self replaceDocument:doc];self.dirty=YES;[self refresh];
 }
 - (void)saveDocument{
     [self endEditing];if(![self checkPendingMeasurements])return;UIAlertController *a=[UIAlertController alertControllerWithTitle:@"Enregistrer sur l’iPhone" message:@"Le relevé et sa photo seront conservés dans PRIV Key jusqu’à leur suppression." preferredStyle:UIAlertControllerStyleAlert];
@@ -332,7 +439,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
 - (void)preview{[self endEditing];if(![self validGeometry])return;PKPreviewController *vc=[PKPreviewController new];vc.document=self.doc;[self presentViewController:[[UINavigationController alloc]initWithRootViewController:vc] animated:YES completion:nil];}
 - (void)physicalScale{
     [self endEditing];if(![self checkPendingMeasurements])return;if(!(self.doc.millimetersPerUnit>0)){PKMessage(self,@"Échelle de l’image requise",@"Place A et B et applique leur distance réelle avant d’afficher le contour à taille réelle.");return;}
-    self.modes.selectedSegmentIndex=2;self.canvas.mode=PKCanvasModeAdjust;self.canvas.selectedIndex=-1;[self refresh];
+    self.modes.selectedSegmentIndex=3;[self updateCanvasMode];self.canvas.selectedIndex=-1;[self refresh];
     UIAlertController *menu=[UIAlertController alertControllerWithTitle:@"Contour à taille réelle" message:@"L’écran doit être étalonné avec une règle. Un zoom ultérieur quitte l’échelle réelle." preferredStyle:UIAlertControllerStyleActionSheet];
     CGFloat saved=[[NSUserDefaults standardUserDefaults]doubleForKey:@"screenPointsPerMM"];
     if(saved>=3&&saved<=7.125)[menu addAction:[UIAlertAction actionWithTitle:@"Appliquer l’étalonnage enregistré" style:UIAlertActionStyleDefault handler:^(UIAlertAction *a){[self.canvas setPhysicalScale:saved unitsPerMillimeter:1/self.doc.millimetersPerUnit];}]];
@@ -374,7 +481,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     for(NSURL *url in urls){if(![url.lastPathComponent hasPrefix:@"PRIVKey-Export-"])continue;NSDate *date=nil;[url getResourceValue:&date forKey:NSURLContentModificationDateKey error:nil];if(date && [date timeIntervalSinceNow]<-86400)[[NSFileManager defaultManager]removeItemAtURL:url error:nil];}
 }
 - (void)help{
-    PKMessage(self,@"PRIV Key · premier test",@"1. Commence avec l’exemple fictif pour tester l’aperçu et les exports.\n\n2. Pour un relevé, prends une photo de face, avec une règle dans le même plan. Place A et B puis indique leur distance réelle.\n\n3. Trace les points dans l’ordre. Ferme le contour et corrige les croisements signalés.\n\n4. Mesure l’épaisseur, applique les valeurs, puis vérifie la 3D.\n\n5. Exporte le STL, le SVG ou le relevé JSON.\n\nLa perspective n’est pas corrigée. La silhouette ne décrit pas les rainures latérales. Une copie fonctionnelle exige des mesures et une validation mécanique complémentaires.\n\nL’app fonctionne sans réseau. L’enregistrement conserve la photo localement ; les exports partagés dépendent de l’application destinataire.");
+    PKMessage(self,@"PRIV Key · carte, pièce et traits",@"1. Photo : carte ID-1 derrière l’objet, pièce à côté ou règle, vue de face. Référence et contour doivent être à la même hauteur.\n\n2. Référence : choisis carte grand/petit côté, 1 €, 2 €, 50 centimes ou mesure personnalisée. Place A et B sur les extrémités du côté, ou d’un diamètre de la pièce. Le rectangle ou le cercle sert à vérifier l’alignement.\n\n3. Traits : définis O puis X pour orienter l’axe. Passe sur Placer les traits et touche la photo. Déplace les points avec la loupe ; X/Y donnent leur position signée en mm.\n\n4. Contour : place les points dans l’ordre. Tu peux aussi copier chaque point d’un trait dans un contour ouvert, puis ajuster cette copie séparément. Ferme le contour.\n\n5. Mesure l’épaisseur, applique-la, vérifie la 3D et exporte. JSON conserve photo, référence, axe et traits.\n\nUne photo inclinée ou une pièce vue en ellipse donne des mesures fausses : la perspective n’est pas corrigée. La silhouette ne décrit pas les rainures latérales et ne garantit pas un double fonctionnel.\n\nL’app travaille sur l’iPhone, sans envoi réseau. Enregistre ton relevé pour le conserver.");
 }
 @end
 

@@ -16,6 +16,7 @@ import io
 import json
 import os
 from pathlib import Path
+import platform
 import plistlib
 import shutil
 import struct
@@ -27,7 +28,7 @@ import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "native/PRIVKey"
-VERSION = "0.1.1"
+VERSION = "0.2.0"
 PACKAGE_ID = "fr.privos.keylab"
 APP_NAME = "PRIVKey"
 APP_PATH = "var/jb/Applications/PRIVKey.app"
@@ -36,6 +37,7 @@ DEFAULT_OUTPUT = ROOT / "build/keylab"
 DEFAULT_EPOCH = 1793203200  # 2026-10-28 16:00 UTC
 SOURCE_PATHS = ["native/PRIVKey", "scripts/build_keylab.py",
                 "scripts/test_key_geometry.c", "scripts/test_key_package_install.py",
+                "scripts/smoke_keylab_simulator.py", "scripts/PKReferenceSmoke.m",
                 ".github/workflows/build-keylab.yml"]
 
 
@@ -93,7 +95,8 @@ def write_png(path: Path, size: int) -> None:
     path.write_bytes(png)
 
 
-def app_info(sdk_version: str) -> dict:
+def app_info(sdk_version: str, *, simulator: bool = False) -> dict:
+    sdk_name = "iphonesimulator" if simulator else "iphoneos"
     return {
         "CFBundleDevelopmentRegion": "fr",
         "CFBundleDisplayName": "PRIV Key",
@@ -103,10 +106,11 @@ def app_info(sdk_version: str) -> dict:
         "CFBundleName": APP_NAME,
         "CFBundlePackageType": "APPL",
         "CFBundleShortVersionString": VERSION,
-        "CFBundleVersion": "2",
+        "CFBundleVersion": "3",
         "MinimumOSVersion": "15.0",
-        "DTPlatformName": "iphoneos",
-        "DTSDKName": "iphoneos" + sdk_version,
+        "DTPlatformName": sdk_name,
+        "DTSDKName": sdk_name + sdk_version,
+        "CFBundleSupportedPlatforms": ["iPhoneSimulator" if simulator else "iPhoneOS"],
         "LSRequiresIPhoneOS": True,
         "UIDeviceFamily": [1, 2],
         "UILaunchScreen": {},
@@ -126,21 +130,34 @@ def app_info(sdk_version: str) -> dict:
     }
 
 
-def build_native(destination: Path) -> tuple[Path, dict]:
+def build_native(destination: Path, *, simulator: bool = False,
+                 extra_sources: list[Path] | None = None) -> tuple[Path, dict]:
     if sys.platform != "darwin":
         raise RuntimeError("The iOS app must be compiled on macOS with Xcode. Use the GitHub Actions workflow.")
-    sdk = output(["xcrun", "--sdk", "iphoneos", "--show-sdk-path"])
-    sdk_version = output(["xcrun", "--sdk", "iphoneos", "--show-sdk-version"])
-    clang = output(["xcrun", "--sdk", "iphoneos", "--find", "clang"])
+    if extra_sources and not simulator:
+        raise ValueError("Additional test sources are limited to the simulator build")
+    sdk_name = "iphonesimulator" if simulator else "iphoneos"
+    target_architecture = platform.machine() if simulator else "arm64"
+    if target_architecture not in {"arm64", "x86_64"}:
+        raise RuntimeError("Unsupported simulator host architecture: " + target_architecture)
+    target = target_architecture + "-apple-ios15.0" + ("-simulator" if simulator else "")
+    sdk = output(["xcrun", "--sdk", sdk_name, "--show-sdk-path"])
+    sdk_version = output(["xcrun", "--sdk", sdk_name, "--show-sdk-version"])
+    clang = output(["xcrun", "--sdk", sdk_name, "--find", "clang"])
     app = destination / (APP_NAME + ".app")
     app.mkdir(parents=True, exist_ok=True)
     object_dir = destination / "objects"
     object_dir.mkdir(exist_ok=True)
     sources = sorted([*SOURCE.glob("*.m"), *SOURCE.glob("*.c")])
+    sources.extend(Path(path).resolve() for path in (extra_sources or []))
     if not sources or not any(path.suffix == ".m" for path in sources):
         raise RuntimeError("No native Objective-C application sources were found")
+    if any(not path.is_file() or path.suffix not in {".m", ".c"} for path in sources):
+        raise RuntimeError("A native source file is missing or has an unsupported type")
+    if len({path.name for path in sources}) != len(sources):
+        raise RuntimeError("Native source filenames must be unique")
     objects = []
-    flags = ["-target", "arm64-apple-ios15.0", "-isysroot", sdk,
+    flags = ["-target", target, "-isysroot", sdk,
              "-Os", "-Wall", "-Wextra", "-Werror=implicit-function-declaration",
              "-fvisibility=hidden", "-fstack-protector-strong", "-I", str(SOURCE)]
     for source in sources:
@@ -149,27 +166,27 @@ def build_native(destination: Path) -> tuple[Path, dict]:
         run([clang, *flags, *extra, "-c", str(source), "-o", str(obj)])
         objects.append(obj)
     executable = app / APP_NAME
-    link = [clang, "-target", "arm64-apple-ios15.0", "-isysroot", sdk,
+    link = [clang, "-target", target, "-isysroot", sdk,
             "-Wl,-pie", *map(str, objects), "-lobjc"]
     for framework in ("UIKit", "Foundation", "CoreGraphics", "QuartzCore", "PhotosUI", "UniformTypeIdentifiers", "SceneKit"):
         link.extend(["-framework", framework])
     run([*link, "-o", str(executable)])
     executable.chmod(0o755)
-    (app / "Info.plist").write_bytes(plistlib.dumps(app_info(sdk_version), sort_keys=True))
+    (app / "Info.plist").write_bytes(plistlib.dumps(app_info(sdk_version, simulator=simulator), sort_keys=True))
     for name, size in (("AppIcon60x60@2x.png", 120), ("AppIcon60x60@3x.png", 180),
                        ("AppIcon76x76.png", 76), ("AppIcon76x76@2x.png", 152)):
         write_png(app / name, size)
     run(["codesign", "--force", "--sign", "-", "--timestamp=none", str(app)])
     run(["codesign", "--verify", "--deep", "--strict", "--verbose=2", str(app)])
     architecture = output(["xcrun", "lipo", "-archs", str(executable)])
-    if architecture != "arm64":
+    if architecture != target_architecture:
         raise RuntimeError("Unexpected native architecture: " + architecture)
     native_data = executable.read_bytes()
     if native_data[:4] != b"\xcf\xfa\xed\xfe":
         raise RuntimeError("The native executable is not a 64-bit Mach-O")
     report = {"native_compilation": "passed", "signature_verification": "passed",
               "signing": "ad hoc, no privileged entitlements", "architecture": architecture,
-              "minimum_ios": "15.0", "build_sdk": sdk_version,
+              "minimum_ios": "15.0", "build_sdk": sdk_version, "platform": sdk_name,
               "executable_sha256": digest(native_data),
               "sources": {str(p.relative_to(ROOT)): digest(p.read_bytes()) for p in sources},
               "device_validation": "Not performed. Installation, UIKit, camera, and physical dimensions require testing on the iPhone."}

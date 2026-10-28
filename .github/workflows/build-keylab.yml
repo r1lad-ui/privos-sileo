@@ -8,6 +8,8 @@ on:
       - 'scripts/build_keylab.py'
       - 'scripts/test_key_geometry.c'
       - 'scripts/test_key_package_install.py'
+      - 'scripts/smoke_keylab_simulator.py'
+      - 'scripts/PKReferenceSmoke.m'
       - '.github/workflows/build-keylab.yml'
   workflow_dispatch:
 
@@ -38,14 +40,24 @@ jobs:
           fetch-depth: 0
       - name: Test, compile, sign and package
         run: python3 scripts/build_keylab.py
+      - name: Verify references and guides on an iPhone SE simulator
+        run: python3 scripts/smoke_keylab_simulator.py
       - name: Keep installable package and validation report
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: PRIV-Key-0.1.1-${{ github.run_number }}
+          name: PRIV-Key-0.2.0-${{ github.run_number }}
           path: |
             build/keylab/*.deb
             build/keylab/validation.json
           if-no-files-found: error
+          retention-days: 30
+      - name: Keep simulator verification and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: PRIV-Key-simulator-${{ github.run_number }}
+          path: build/keylab-simulator/verification/
+          if-no-files-found: warn
           retention-days: 30
       - name: Publish to the existing Sileo source
         if: github.ref == 'refs/heads/main'
@@ -54,4 +66,4 @@ jobs:
         run: |
           python3 scripts/build_keylab.py --publish-git \
             --built-commit "$KEYLAB_BUILD_COMMIT" \
-            --package build/keylab/fr.privos.keylab_0.1.1_iphoneos-arm64.deb
+            --package build/keylab/fr.privos.keylab_0.2.0_iphoneos-arm64.deb

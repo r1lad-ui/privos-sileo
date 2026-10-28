@@ -6,6 +6,8 @@ typedef NS_ENUM(NSInteger, PKCanvasMode) {
     PKCanvasModeCalibration = 0,
     PKCanvasModeTrace = 1,
     PKCanvasModeAdjust = 2,
+    PKCanvasModeGuideAxis = 3,
+    PKCanvasModeGuides = 4,
 };
 
 /// A local, manual outline editor. All points use document coordinates.
@@ -14,6 +16,13 @@ typedef NS_ENUM(NSInteger, PKCanvasMode) {
 @property(nonatomic) CGSize documentSize;
 @property(nonatomic, strong) NSMutableArray<NSValue *> *points;
 @property(nonatomic, strong) NSMutableArray<NSValue *> *calibrationPoints;
+/// Presets: custom, card-long, card-short, coin-1, coin-2, coin-50.
+@property(nonatomic, copy) NSString *referenceKind;
+@property(nonatomic) BOOL referenceFlipped;
+@property(nonatomic, strong) NSMutableArray<NSValue *> *guideAxisPoints;
+@property(nonatomic, strong) NSMutableArray<NSValue *> *guidePoints;
+@property(nonatomic) NSInteger selectedGuideIndex;
+@property(nonatomic) CGFloat millimetersPerUnit;
 @property(nonatomic) BOOL closed;
 @property(nonatomic) PKCanvasMode mode;
 @property(nonatomic) NSInteger selectedIndex;
