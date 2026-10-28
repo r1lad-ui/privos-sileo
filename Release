@@ -6,10 +6,10 @@ Version: 0.5.5
 Architectures: iphoneos-arm64
 Components: main
 Description: PRIV OS Lab 0.5.5 rootless experimental
-Date: Wed, 28 Oct 2026 12:00:00 +0000
+Date: Wed, 28 Oct 2026 16:42:36 +0000
 MD5Sum:
- d9462549543917961244553297a4fc49 713 Packages
- 2f5d8667c38884fa38b475696ab12e2d 507 Packages.gz
+ 0abb37bbacec3ceaba0582fec0f738d4 1306 Packages
+ 405d6629a937d53eb79ce51ec6c7a767 768 Packages.gz
 SHA256:
- fb384eb8fff2c07c4821e359a04a2e03e1232e97130244d2448928a8407d1f26 713 Packages
- a27cb5dd4e236f21d2c27dfaddcaf367379d60e982326e9d21d4213366d09f3c 507 Packages.gz
+ e9d4188428505de349b6240b4dbb962beca3ba787c2c129e3b28897a8b3f9b1b 1306 Packages
+ 18990bfb114031fec05e4ddd28562513b7cda81d819754e470003715e780cb72 768 Packages.gz
