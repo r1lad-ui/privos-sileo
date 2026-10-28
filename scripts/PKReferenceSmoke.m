@@ -278,7 +278,7 @@ static void PKSmokeRun(void) {
         PKSmokeRequire(created, directoryError.localizedDescription ?: @"Cannot create smoke report directory");
         PKSmokeModelChecks(checks);
 
-        UIWindow *window = [UIApplication.sharedApplication.delegate valueForKey:@"window"];
+        UIWindow *window = UIApplication.sharedApplication.delegate.window;
         PKSmokeRequire(window != nil && !window.hidden, @"The native application window is unavailable");
         UIViewController *controller = window.rootViewController;
         if ([controller isKindOfClass:UINavigationController.class])
