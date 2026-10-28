@@ -1,15 +1,27 @@
 # PRIV OS LAB — Sileo repository
 
-**Experimental rootless iOS package for iPhone SE 2020, iOS 17.5 and Dopamine.**
+**Experimental rootless iOS package for the PRIV OS iPhone SE (2020) project.**
 
 ## Installation through Sileo
 Use the existing PRIV OS source, or add this address in Sileo > Sources > +:
 
 `https://raw.githubusercontent.com/r1lad-ui/privos-sileo/main/`
 
-Install **PRIV OS LAB 0.5.4 (Fonds dans Photos)** from Sileo. Close and reopen **PRIV Control**, then use **Fonds d’écran → Enregistrer dans Photos**. [Guide des fonds d’écran](FONDS.md).
+Install **PRIV OS LAB 0.5.5 (Sécurité et fonds)** from Sileo. Close and reopen **PRIV Control**, then open **Sécurité** for the device-reported diagnostic and settings guide. [Guide sécurité](SECURITE.md).
+
+Wallpapers remain available through **Fonds d’écran → Enregistrer dans Photos**. [Guide des fonds d’écran](FONDS.md).
 
 For icons, open LumenBoard and apply **PRIV OS 0.5**. [Activation et applications couvertes](ICONES.md).
+
+## Mise à jour 0.5.5 (28 octobre 2026)
+
+- Écran **Sécurité** : code iOS configuré ou absent uniquement lorsque le système permet de le conclure ; autres résultats non vérifiables.
+- Disponibilité de Touch ID pour PRIV et version déclarée par iOS, actualisées à l'ouverture et au retour dans l'app.
+- Guide des réglages de verrouillage, avec ouverture de Réglages et aucune modification automatique des préférences du téléphone.
+- Cache opaque pour masquer le contenu de PRIV quand l'app devient inactive, en complément du verrouillage du coffre existant.
+- Galerie des fonds, thème, modules et code du coffre conservés.
+
+[Instructions](SECURITE.md) · [Périmètre et validation](CHANGELOG_0.5.5.md)
 
 ## Mise à jour 0.5.4 (28 octobre 2026)
 

@@ -1,11 +1,11 @@
-# Icônes et fonds PRIV OS — version 0.5.4
+# Icônes et fonds PRIV OS — version 0.5.5
 
-La mise à jour **PRIV OS LAB 0.5.4 (Fonds dans Photos)** conserve le thème enrichi en 0.5.3, déjà utilisé avec **LumenBoard**, et rend les fonds accessibles dans l'app. Elle contient **53 identifiants d'applications**, dont PRIV Control. Le nom du thème reste **PRIV OS 0.5**, afin de conserver la sélection existante.
+La mise à jour **PRIV OS LAB 0.5.5 (Sécurité et fonds)** conserve le thème enrichi en 0.5.3, déjà utilisé avec **LumenBoard**, et la galerie des fonds ajoutée en 0.5.4. Elle contient **53 identifiants d'applications**, dont PRIV Control. Le nom du thème reste **PRIV OS 0.5**, afin de conserver la sélection existante.
 
 ## Mettre à jour les icônes
 
 1. Dans **Sileo → Sources**, actualiser le dépôt PRIV OS déjà présent.
-2. Installer la mise à jour **PRIV OS LAB 0.5.4**.
+2. Installer la mise à jour **PRIV OS LAB 0.5.5**.
 3. Ouvrir **LumenBoard**, sélectionner le thème **PRIV OS 0.5**, puis **Apply**.
 4. Si quelques anciennes icônes persistent, utiliser une fois **LumenBoard → Settings → Clear icon cache & respring**, puis vérifier le résultat.
 

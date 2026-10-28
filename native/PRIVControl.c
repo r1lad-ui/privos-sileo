@@ -1,4 +1,4 @@
-/* PRIV Control 0.5.4 — UIKit app for iOS rootless jailbreak (laboratory build).
+/* PRIV Control 0.5.5 — UIKit app for iOS rootless jailbreak (laboratory build).
    No SpringBoard injection. Vault encrypted using Apple's CommonCrypto
    PBKDF2-HMAC-SHA256 + AES-256-CBC + encrypt-then-HMAC-SHA256.
    Compatible with files from THIS version only. NOT a hardened OS.
@@ -175,11 +175,12 @@ static BOOL launchBundle(const char *bundle){
 }
 
 #include "WallpaperGallery.inc"
+#include "SecurityCenter.inc"
 
 static void press(id self,SEL cmd,id sender){(void)self;(void)cmd;long tag=((long(*)(id,SEL))objc_msgSend)(sender,S("tag"));endKeyboard();
  switch(tag){case 1:handleUnlock();break;case 2:lockVault();break;case 3:handleSave();break;case 4:handlePicker();break;case 5:handleDeletePhoto();break;
  case 6:generate();break;case 7:copyGenerated();break;case 8:clearPaste();break;
- case 9:alert("A propos","PRIV OS 0.5.4 est une application experimentale. Elle chiffre les donnees qu'elle enregistre, mais ne securise pas iOS jailbreaké et ne coupe pas camera/micro ni VPN.");break;
+ case 9:alert("A propos","PRIV OS 0.5.5 est une application experimentale. Elle chiffre les donnees qu'elle enregistre, mais ne securise pas iOS jailbreaké et ne coupe pas camera/micro ni VPN.");break;
  case 10:if(g_unlocked){V1(g_noteField,"setText:",MS(""));handleSave();}else alert("Coffre verrouille","Ouvre le coffre.");break;
  case 11:scrollTo(650);break; /* notes */
  case 12:scrollTo(1005);break; /* photos */
@@ -194,6 +195,10 @@ static void press(id self,SEL cmd,id sender){(void)self;(void)cmd;long tag=((lon
  case 21:wpSave(1);break;
  case 22:wpOpenPhotos();break;
  case 23:wpOpenSettings();break;
+ case 24:securityOpen();break;
+ case 25:securityClose();break;
+ case 26:securityRefresh();break;
+ case 27:securityOpenSettings();break;
  }}
 static id txtInput(id p,Rect r,BOOL secret){id t=view(C("UITextField"),r,soft);borderRadius(t,11);V1(t,"setTextColor:",white);V1(t,"setFont:",MD(C("UIFont"),"systemFontOfSize:",14));VB(t,"setSecureTextEntry:",secret);VB(t,"setAutocorrectionType:",1);VB(t,"setSpellCheckingType:",1);VB(t,"setAutocapitalizationType:",0);VB(t,"setClearButtonMode:",1);VI(t,"setKeyboardAppearance:",1);id spacer=view(C("UIView"),R(0,0,11,1),0);V1(t,"setLeftView:",spacer);VI(t,"setLeftViewMode:",3);add(p,t);return t;}
 static void buildHome(id self,SEL cmd){typedef struct{id receiver;Class super_class;} super_t;super_t sup={self,C("UIViewController")};((void(*)(super_t*,SEL))objc_msgSendSuper)(&sup,cmd);g_ctrl=self;
@@ -201,8 +206,10 @@ static void buildHome(id self,SEL cmd){typedef struct{id receiver;Class super_cl
  g_scroll=view(C("UIScrollView"),R(0,0,w,h),bg);VB(g_scroll,"setAlwaysBounceVertical:",1);VI(g_scroll,"setKeyboardDismissMode:",2);add(root,g_scroll);
  double total=1685;id content=view(C("UIView"),R(0,0,w,total),bg);add(g_scroll,content);((void(*)(id,SEL,Size))objc_msgSend)(g_scroll,S("setContentSize:"),(Size){w,total});
  textLabel(content,"PRIV",R(20,47,120,44),37,1,white);textLabel(content,"CONTROL",R(137,53,w-152,40),27,1,green);
- textLabel(content,"PRIV OS / v0.5.4 • LAB",R(20,105,w-200,20),11,1,muted);
- mkButton(content,"Fonds d'écran",18,R(w-165,99,145,32),1);
+ textLabel(content,"PRIV OS / v0.5.5 • LAB",R(20,25,w-40,18),11,1,muted);
+ double headerButtonWidth=(w-56)/2;
+ mkButton(content,"Sécurité",24,R(20,99,headerButtonWidth,32),1);
+ mkButton(content,"Fonds d'écran",18,R(w-20-headerButtonWidth,99,headerButtonWidth,32),1);
  id hero=panel(content,R(14,135,w-28,105));textLabel(hero,"COFFRE LOCAL CHIFFRE",R(16,11,w-58,21),15,1,green);
  textLabel(hero,"Mot de passe prive. Aucune synchronisation.\nSur cet iPhone, le jailbreak reste un risque.",R(16,39,w-60,54),12,0,white);
  textLabel(content,"RACCOURCIS  /  ACTIONS REELLES",R(20,251,w-40,22),14,1,white);
@@ -239,9 +246,13 @@ static void buildHome(id self,SEL cmd){typedef struct{id receiver;Class super_cl
 }
 static void resign(id self,SEL cmd,id app){(void)self;(void)cmd;(void)app;endKeyboard();lockVault();wipe(g_pwd,sizeof(g_pwd));if(g_generated)V1(g_generated,"setText:",MS(""));}
 static BOOL finish(id self,SEL cmd,id app,id opts){(void)self;(void)cmd;(void)app;(void)opts;
- bg=color(.051,.078,.122);card=color(.087,.126,.184);soft=color(.133,.182,.247);green=color(.37,.93,.78);white=color(.951,.980,.990);muted=color(.64,.73,.80);red=color(.93,.39,.42);
+ /* These shared UI colors outlive UIKit's launch autorelease pool. */
+ bg=M0(color(.051,.078,.122),"retain");card=M0(color(.087,.126,.184),"retain");soft=M0(color(.133,.182,.247),"retain");green=M0(color(.37,.93,.78),"retain");white=M0(color(.951,.980,.990),"retain");muted=M0(color(.64,.73,.80),"retain");red=M0(color(.93,.39,.42),"retain");
  Rect r=((Rect(*)(id,SEL))objc_msgSend)(M0(C("UIScreen"),"mainScreen"),S("bounds"));g_window=MR(M0(C("UIWindow"),"alloc"),"initWithFrame:",r);id root=M0(M0(C("PRIVViewController"),"alloc"),"init");V1(g_window,"setRootViewController:",root);V0(g_window,"makeKeyAndVisible");return 1;}
+static void securityResign(id self,SEL cmd,id app){securityShowCover();resign(self,cmd,app);}
+static void securityEnteredBackground(id self,SEL cmd,id app){securityShowCover();resign(self,cmd,app);}
+static void securityBecameActive(id self,SEL cmd,id app){(void)self;(void)cmd;(void)app;securityHideCover();if(g_securityRoot)securityRefresh();}
 int main(int argc,char**argv){id pool=M0(M0(C("NSAutoreleasePool"),"alloc"),"init");
  Class ctrl=objc_allocateClassPair(C("UIViewController"),"PRIVViewController",0);class_addMethod(ctrl,S("viewDidLoad"),(void*)buildHome,"v@:");class_addMethod(ctrl,S("press:"),(void*)press,"v@:@");class_addMethod(ctrl,S("imagePickerController:didFinishPickingMediaWithInfo:"),(void*)pickerSelected,"v@:@@");class_addMethod(ctrl,S("imagePickerControllerDidCancel:"),(void*)pickerCancel,"v@:@");class_addMethod(ctrl,S("wallpaperImage:didFinishSavingWithError:contextInfo:"),(void*)wpSaveCompleted,"v@:@@^v");class_addMethod(ctrl,S("wallpaperSaveFinished:"),(void*)wpSaveFinished,"v@:@");objc_registerClassPair(ctrl);
- Class del=objc_allocateClassPair(C("UIResponder"),"PRIVDelegate",0);class_addMethod(del,S("application:didFinishLaunchingWithOptions:"),(void*)finish,"c@:@@");class_addMethod(del,S("applicationWillResignActive:"),(void*)resign,"v@:@");objc_registerClassPair(del);
+ Class del=objc_allocateClassPair(C("UIResponder"),"PRIVDelegate",0);class_addMethod(del,S("application:didFinishLaunchingWithOptions:"),(void*)finish,"c@:@@");class_addMethod(del,S("applicationWillResignActive:"),(void*)securityResign,"v@:@");class_addMethod(del,S("applicationDidEnterBackground:"),(void*)securityEnteredBackground,"v@:@");class_addMethod(del,S("applicationDidBecomeActive:"),(void*)securityBecameActive,"v@:@");objc_registerClassPair(del);
  int code=UIApplicationMain(argc,argv,0,MS("PRIVDelegate"));V0(pool,"drain");return code;}

@@ -1,14 +1,14 @@
 Package: fr.privos.control
-Version: 0.5.4
+Version: 0.5.5
 Architecture: iphoneos-arm64
 Maintainer: PRIV OS Lab
 Depends: firmware (>= 15.0), firmware (<< 18.0), com.opa334.ccsupport
-Filename: debs/PRIV_OS_0_5_4_Sileo_iphoneos-arm64.deb
-Size: 2279056
-MD5sum: d11893aef7e7e4e25ec81d0098dd85f3
-SHA1: b2bb5f94841f8dd4147126cf4ab8917c500d16e1
-SHA256: 2e8f29fbf697a03203bb675afd36db26ac09cb367358ad435c3dde79eee88737
+Filename: debs/PRIV_OS_0_5_5_Sileo_iphoneos-arm64.deb
+Size: 2284056
+MD5sum: bd2f6c016f66b2a4e716e2c65455be1f
+SHA1: 0347ea05189eac9f377d85625c8bf0eedc8acaf9
+SHA256: 7f893a978ebfb09340b6a1546e2e719296a3d6d783a86d42a9adbac52c312866
 Section: Applications
 Priority: optional
-Name: PRIV OS LAB 0.5.4 (Fonds dans Photos)
-Description: Galerie native Fonds d'ecran dans PRIV Control : apercus PRIV Nuit et Classique, enregistrement explicite dans Photos. Theme LumenBoard de 53 applications conserve, modules et format du coffre conserves.
+Name: PRIV OS LAB 0.5.5 (Securite et fonds)
+Description: Ecran Securite : disponibilite du code et de Touch ID declaree par iOS, guide de verrouillage, contenu PRIV masque hors activite. Aucun changement automatique des reglages iOS. Fonds Photos et theme LumenBoard conserves.

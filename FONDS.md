@@ -1,12 +1,12 @@
-# Fonds d’écran dans PRIV Control — 0.5.4
+# Fonds d’écran dans PRIV Control — depuis la 0.5.4
 
 Les fonds **PRIV Nuit** et **PRIV Classique** sont désormais accessibles directement dans l’application. Ils fonctionnent hors ligne et ne nécessitent pas l’ouverture du coffre.
 
 ## Installer et enregistrer un fond
 
 1. Dans **Sileo → Sources**, actualiser le dépôt PRIV OS déjà installé.
-2. Installer **PRIV OS LAB 0.5.4 (Fonds dans Photos)**.
-3. Fermer PRIV Control depuis le sélecteur d’applications si elle était déjà ouverte, puis la relancer. L’accueil doit indiquer **v0.5.4**.
+2. Installer la version actuelle, **PRIV OS LAB 0.5.5 (Sécurité et fonds)**, qui conserve la galerie de la 0.5.4.
+3. Fermer PRIV Control depuis le sélecteur d’applications si elle était déjà ouverte, puis la relancer. L’accueil doit indiquer **v0.5.5**.
 4. Toucher le bouton vert **Fonds d’écran**, en haut de l’accueil.
 5. Sous le fond choisi, toucher **Enregistrer dans Photos**.
 6. À la première demande iOS, autoriser l’ajout dans Photos. Attendre le message **Enregistré dans Photos**.
@@ -18,7 +18,7 @@ L’installation seule ne remplit pas la photothèque : l’ajout se fait après
 
 ## En cas de difficulté
 
-- **Le bouton Fonds d’écran n’apparaît pas** : vérifier la version 0.5.4 dans Sileo, fermer complètement PRIV Control puis la rouvrir. Il n’est pas nécessaire de réinstaller le moteur de thème.
+- **Le bouton Fonds d’écran n’apparaît pas** : vérifier la version actuelle dans Sileo, fermer complètement PRIV Control puis la rouvrir. La galerie existe depuis la 0.5.4 ; il n’est pas nécessaire de réinstaller le moteur de thème.
 - **L’accès est refusé** : toucher **Réglages iOS** dans la galerie pour ouvrir les réglages de PRIV Control, autoriser l’ajout à Photos, puis revenir et réessayer. Une restriction iOS ou Temps d’écran peut devoir être levée séparément.
 - **L’image a été supprimée de Photos** : toucher **Enregistrer à nouveau**. L’application mémorise un export réussi, mais ne lit pas la photothèque pour vérifier si cette copie existe encore.
 - **Un enregistrement échoue** : aucun succès n’est affiché tant qu’iOS ne l’a pas confirmé ; vérifier l’autorisation et l’espace libre, puis réessayer.
