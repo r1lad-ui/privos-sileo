@@ -1,8 +1,10 @@
-# PRIV Key LAB 0.2.0
+# PRIV Key LAB 0.2.1
 
 Application iOS native de relevé manuel de silhouette, pour l'iPhone SE 2020 sous iOS 17.5 et les jailbreaks rootless compatibles. Aucun site ni WebView dans l'application. Elle utilise UIKit, les sélecteurs de photos d'iOS et SceneKit.
 
 La version 0.2.0 ajoute des références de taille **carte ID-1 et pièces en euros**, un **axe de mesure orientable**, des **traits déplaçables**, une **loupe pendant le déplacement** et un **éditeur plein écran**. Le fonctionnement s'inspire du principe montré dans la vidéo fournie, avec une implémentation propre à PRIV Key. La vidéo n'est pas incluse dans le paquet.
+
+La version 0.2.1 améliore la lisibilité sur l'écran de l'iPhone SE : boutons d'historique compacts, mesures placées à distance des poignées et repères affichés selon le mode actif pour éviter les libellés superposés.
 
 ## Installation
 
@@ -12,13 +14,13 @@ Le paquet s'appelle **PRIV Key LAB**, identifiant fr.privos.keylab. Il est disti
 
 Après la réussite du workflow **Build PRIV Key**, actualiser les sources dans Sileo, rechercher **PRIV Key LAB**, puis installer. L'icône **PRIV Key** est enregistrée par le script du paquet. Le paquet installe seulement son application dans /var/jb/Applications/PRIVKey.app. Il ne modifie ni PRIV Control, ni ses données, ni SpringBoard.
 
-Le fichier installable est publié dans debs/fr.privos.keylab_0.2.0_iphoneos-arm64.deb. La signature ad hoc de ce paquet nécessite un environnement jailbreaké compatible.
+Le fichier installable est publié dans debs/fr.privos.keylab_0.2.1_iphoneos-arm64.deb. La signature ad hoc de ce paquet nécessite un environnement jailbreaké compatible.
 
 ### Correction d'installation 0.1.1
 
 La version 0.1.0 omettait les entrées de dossiers dans l'archive du paquet. Une installation neuve avec dpkg pouvait échouer avec « unable to create … PRIVKey.app/… : No such file or directory ». La version 0.1.1 déclare les dossiers avant leurs fichiers et utilise le shell rootless /var/jb/bin/sh dans les scripts d'installation et de retrait.
 
-Cette correction est conservée dans la version 0.2.0. Si l'installation 0.1.0 a échoué, actualiser la source dans Sileo et installer la dernière version. Si une erreur demeure, conserver les lignes du journal situées avant « subprocess returned an error code » : cette dernière ligne seule ne précise pas la cause.
+Cette correction est conservée dans les versions suivantes. Si l'installation 0.1.0 a échoué, actualiser la source dans Sileo et installer la dernière version. Si une erreur demeure, conserver les lignes du journal situées avant « subprocess returned an error code » : cette dernière ligne seule ne précise pas la cause.
 
 ## Premier essai
 

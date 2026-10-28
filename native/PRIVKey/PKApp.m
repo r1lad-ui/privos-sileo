@@ -186,7 +186,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     UIBarButtonItem *expand=[[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"arrow.up.left.and.arrow.down.right"] style:UIBarButtonItemStylePlain target:self action:@selector(fullscreen)];expand.accessibilityLabel=@"Éditer la photo en plein écran";self.navigationItem.rightBarButtonItems=@[help,expand];
     UIScrollView *scroll=[UIScrollView new];scroll.translatesAutoresizingMaskIntoConstraints=NO;scroll.keyboardDismissMode=UIScrollViewKeyboardDismissModeOnDrag;[self.view addSubview:scroll];
     [NSLayoutConstraint activateConstraints:@[[scroll.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],[scroll.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],[scroll.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],[scroll.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor]]];
-    NSString *version=[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"]?:@"0.2.0";
+    NSString *version=[NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"]?:@"0.2.1";
     UILabel *eyebrow=PKLabel([@"ATELIER PHOTO · " stringByAppendingString:version],11,YES);eyebrow.textColor=PKAccent();
     UILabel *headline=PKLabel(@"Une référence. Des traits.",25,YES);
     self.summary=PKLabel(@"",14,NO);self.summary.textColor=PKMuted();
@@ -210,6 +210,9 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     self.undoButton=PKButton(@"Annuler",@"arrow.uturn.backward",NO,self,@selector(undo));
     self.redoButton=PKButton(@"Refaire",@"arrow.uturn.forward",NO,self,@selector(redo));
     UIButton *fit=PKButton(@"Cadrer",@"arrow.up.left.and.arrow.down.right",NO,self,@selector(fit));
+    for(UIButton *button in @[self.undoButton,self.redoButton,fit]){
+        UIButtonConfiguration *compact=[button.configuration copy];compact.attributedTitle=[[NSAttributedString alloc]initWithString:compact.title?:@"" attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:13 weight:UIFontWeightMedium]}];compact.imagePadding=4;compact.contentInsets=NSDirectionalEdgeInsetsMake(10,8,10,8);compact.preferredSymbolConfigurationForImage=[UIImageSymbolConfiguration configurationWithPointSize:14 weight:UIImageSymbolWeightRegular];button.configuration=compact;button.titleLabel.numberOfLines=1;
+    }
     UIStackView *history=PKStack(@[self.undoButton,self.redoButton,fit],YES,6);history.distribution=UIStackViewDistributionFillEqually;
     self.reference=PKField(@"Distance A–B");self.reference.accessibilityLabel=@"Distance réelle A–B en millimètres";
     self.thickness=PKField(@"Épaisseur");self.thickness.accessibilityLabel=@"Épaisseur mesurée en millimètres";

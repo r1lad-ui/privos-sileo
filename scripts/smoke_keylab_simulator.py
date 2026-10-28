@@ -25,7 +25,17 @@ DEVICE_TYPE = "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
 
 def command(arguments: list[str], *, timeout: int = 60,
             check: bool = True) -> subprocess.CompletedProcess:
-    result = subprocess.run(arguments, text=True, capture_output=True, timeout=timeout)
+    try:
+        result = subprocess.run(arguments, text=True, capture_output=True, timeout=timeout)
+    except subprocess.TimeoutExpired as exc:
+        # Python may return bytes on timeout even with text=True. Retain bounded
+        # boot/install progress so a failed CI run identifies the stalled stage.
+        captured = []
+        for part in (exc.stdout, exc.stderr):
+            captured.append(part.decode("utf-8", errors="replace") if isinstance(part, bytes) else (part or ""))
+        tail = "\n".join(captured)[-3000:]
+        raise RuntimeError(f"Command timed out after {timeout}s: " + " ".join(arguments) +
+                           "\nCaptured output (last 3000 characters):\n" + (tail or "<no output>")) from exc
     if check and result.returncode:
         raise RuntimeError("Command failed: " + " ".join(arguments) + "\n" + result.stdout + result.stderr)
     return result
@@ -43,7 +53,7 @@ def runtime_version(runtime: dict) -> tuple[int, ...]:
         return (0,)
 
 
-def create_device() -> tuple[str, dict]:
+def create_device(preferred_sdk_version: str | None = None) -> tuple[str, dict]:
     inventory = json.loads(simctl("list", "--json").stdout)
     if not any(item.get("identifier") == DEVICE_TYPE for item in inventory.get("devicetypes", [])):
         raise RuntimeError("Xcode has no iPhone SE (3rd generation) device type; the 375 × 667 layout was not tested")
@@ -52,10 +62,17 @@ def create_device() -> tuple[str, dict]:
                 item.get("identifier", "").startswith("com.apple.CoreSimulator.SimRuntime.iOS-")]
     if not runtimes:
         raise RuntimeError("No available iOS simulator runtime is installed; native UI verification was not performed")
+    preferred_version = runtime_version({"version": preferred_sdk_version or "0"})
+    preferred_series = (preferred_version + (0, 0))[:2]
+    def preference(runtime: dict) -> tuple[bool, tuple[int, ...]]:
+        version = runtime_version(runtime)
+        series = (version + (0, 0))[:2]
+        return bool(preferred_sdk_version) and series == preferred_series, version
     errors = []
-    # Older installed runtimes remain candidates if the newest no longer
-    # supports this device type. A new simulator is used in every case.
-    for runtime in sorted(runtimes, key=runtime_version, reverse=True):
+    # Prefer an installed runtime from the build SDK's major/minor series.
+    # Otherwise retain the newest-first fallback; no runtime is downloaded.
+    # All candidates use a fresh simulator, including fallback attempts.
+    for runtime in sorted(runtimes, key=preference, reverse=True):
         name = "PRIV-Key-Verification-" + str(uuid.uuid4())[:8]
         result = simctl("create", name, DEVICE_TYPE, runtime["identifier"], check=False)
         if result.returncode:
@@ -90,7 +107,8 @@ def main() -> int:
         app, compilation = builder.build_native(OUTPUT, simulator=True,
                                                 extra_sources=[builder.ROOT / "scripts/PKReferenceSmoke.m"])
         (verification / "compilation.json").write_text(json.dumps(compilation, indent=2) + "\n")
-        identifier, runtime = create_device()
+        report["preferred_build_sdk"] = compilation["build_sdk"]
+        identifier, runtime = create_device(compilation["build_sdk"])
         report["runtime"] = runtime.get("name", runtime["identifier"])
         report["runtime_identifier"] = runtime["identifier"]
         print("Booting isolated iPhone SE simulator with " + report["runtime"], flush=True)

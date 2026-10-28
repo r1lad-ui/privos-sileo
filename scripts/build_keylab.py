@@ -28,7 +28,7 @@ import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "native/PRIVKey"
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 PACKAGE_ID = "fr.privos.keylab"
 APP_NAME = "PRIVKey"
 APP_PATH = "var/jb/Applications/PRIVKey.app"
@@ -106,7 +106,7 @@ def app_info(sdk_version: str, *, simulator: bool = False) -> dict:
         "CFBundleName": APP_NAME,
         "CFBundlePackageType": "APPL",
         "CFBundleShortVersionString": VERSION,
-        "CFBundleVersion": "3",
+        "CFBundleVersion": "4",
         "MinimumOSVersion": "15.0",
         "DTPlatformName": sdk_name,
         "DTSDKName": sdk_name + sdk_version,
@@ -245,7 +245,7 @@ def control_text(installed_kib: int) -> str:
             "Architecture: iphoneos-arm64\nSection: Applications\nPriority: optional\n"
             "Maintainer: PRIV OS Lab\nDepends: firmware (>= 15.0)\n"
             f"Installed-Size: {installed_kib}\n"
-            "Description: Releve natif de contours, etalonnage et modeles de silhouette pour cles de test. Exports locaux SVG, JSON et STL. Prototype a valider sur iPhone.\n")
+            "Description: Atelier photo natif : references carte et pieces, traits de mesure orientables, loupe et contour manuel. Exports locaux SVG, JSON et STL.\n")
 
 
 POSTINST = """#!/var/jb/bin/sh

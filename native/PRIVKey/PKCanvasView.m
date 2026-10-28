@@ -389,27 +389,39 @@ static CGFloat PKClamp(CGFloat value, CGFloat minimum, CGFloat maximum) {
         [label drawAtPoint:CGPointMake(point.x + 9, point.y - 20) withAttributes:attributes];
     }
 }
-- (void)drawGuideLabel:(NSString *)label at:(CGPoint)point color:(UIColor *)color {
-    NSDictionary *attributes = @{NSFontAttributeName:[UIFont monospacedDigitSystemFontOfSize:10 weight:UIFontWeightSemibold], NSForegroundColorAttributeName:color};
-    CGSize size = [label sizeWithAttributes:attributes];
-    CGFloat width = fmin(size.width + 12, self.bounds.size.width - 16);
-    CGRect box = CGRectMake(PKClamp(point.x + 11, 8, fmax(8, self.bounds.size.width - width - 8)),
-                            PKClamp(point.y - 28, 38, fmax(38, self.bounds.size.height - 54)), width, 22);
+- (void)drawBadge:(NSString *)label frame:(CGRect)box color:(UIColor *)color {
+    if (box.size.width <= 12 || box.size.height <= 10) return;
+    NSMutableParagraphStyle *style = [NSMutableParagraphStyle new];
+    style.lineBreakMode = NSLineBreakByTruncatingTail;
+    NSDictionary *attributes = @{NSFontAttributeName:[UIFont monospacedDigitSystemFontOfSize:10 weight:UIFontWeightSemibold], NSForegroundColorAttributeName:color, NSParagraphStyleAttributeName:style};
     [[UIColor colorWithWhite:0.035 alpha:0.88] setFill];
     [[UIBezierPath bezierPathWithRoundedRect:box cornerRadius:5] fill];
-    [label drawInRect:CGRectInset(box, 6, 5) withAttributes:attributes];
+    CGRect textRect = CGRectMake(box.origin.x + 6, box.origin.y + (box.size.height - 12) / 2, box.size.width - 12, 12);
+    [label drawInRect:textRect withAttributes:attributes];
+}
+- (void)drawReferenceBadge:(NSString *)label {
+    NSString *zoom = _physicalPointsPerUnit > 0 ? @"Échelle écran" : [NSString stringWithFormat:@"Vue ×%.1f", (double)_zoom];
+    CGFloat zoomWidth = [zoom sizeWithAttributes:@{NSFontAttributeName:[UIFont monospacedDigitSystemFontOfSize:11 weight:UIFontWeightMedium]}].width + 16;
+    CGFloat available = fmax(0, self.bounds.size.width - 16 - zoomWidth - 8);
+    CGFloat wanted = [label sizeWithAttributes:@{NSFontAttributeName:[UIFont monospacedDigitSystemFontOfSize:10 weight:UIFontWeightSemibold]}].width + 12;
+    CGFloat width = fmin(wanted, available);
+    [self drawBadge:label frame:CGRectMake(self.bounds.size.width - 8 - width, 8, width, 26) color:PKAmber()];
+}
+- (void)drawMeasurementBadge:(NSString *)label {
+    CGFloat wanted = [label sizeWithAttributes:@{NSFontAttributeName:[UIFont monospacedDigitSystemFontOfSize:10 weight:UIFontWeightSemibold]}].width + 12;
+    CGFloat width = fmin(wanted, fmax(0, self.bounds.size.width - 16));
+    [self drawBadge:label frame:CGRectMake(8, fmax(38, self.bounds.size.height - 60), width, 24) color:PKRose()];
 }
 - (void)drawReferenceOverlay {
-    if (!_calibrationPoints.count) return;
+    if (_mode != PKCanvasModeCalibration || !_calibrationPoints.count) return;
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
-    CGContextSetAlpha(context, _mode == PKCanvasModeCalibration ? 1.0 : 0.36);
+    NSString *caption = nil;
     if (_calibrationPoints.count >= 2) {
         CGPoint a = [self screenPoint:_calibrationPoints[0].CGPointValue];
         CGPoint b = [self screenPoint:_calibrationPoints[1].CGPointValue];
         CGFloat length = hypot(b.x - a.x, b.y - a.y);
         UIBezierPath *shape = nil;
-        NSString *caption = nil;
         if ([_referenceKind hasPrefix:@"card-"] && length > 0.01) {
             CGFloat ratio = [_referenceKind isEqualToString:@"card-short"] ? 85.60 / 53.98 : 53.98 / 85.60;
             CGFloat sign = _referenceFlipped ? -1 : 1;
@@ -433,18 +445,18 @@ static CGFloat PKClamp(CGFloat value, CGFloat minimum, CGFloat maximum) {
         [line moveToPoint:a];[line addLineToPoint:b];
         CGFloat dash[] = {5, 4};[line setLineDash:dash count:2 phase:0];
         line.lineWidth = 1.5;[PKAmber() setStroke];[line stroke];
-        if (caption && _mode == PKCanvasModeCalibration)
-            [self drawGuideLabel:caption at:CGPointMake((a.x + b.x) / 2, (a.y + b.y) / 2) color:PKAmber()];
     }
     for (NSUInteger i = 0; i < MIN((NSUInteger)2, _calibrationPoints.count); i++) {
         [self drawPoint:[self screenPoint:_calibrationPoints[i].CGPointValue] color:PKAmber()
               selected:_mode == PKCanvasModeCalibration && (NSInteger)i == _nextCalibrationPoint label:i == 0 ? @"A" : @"B"];
     }
     CGContextRestoreGState(context);
+    if (caption) [self drawReferenceBadge:caption];
 }
 - (void)drawGuides {
-    if (!_guideAxisPoints.count && !_guidePoints.count) return;
+    if (_mode == PKCanvasModeCalibration || (!_guideAxisPoints.count && !_guidePoints.count)) return;
     BOOL active = _mode == PKCanvasModeGuideAxis || _mode == PKCanvasModeGuides;
+    NSString *measurementCaption = nil;
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     CGContextClipToRect(context, CGRectInset(self.bounds, 5, 5));
@@ -481,21 +493,20 @@ static CGFloat PKClamp(CGFloat value, CGFloat minimum, CGFloat maximum) {
                 [measurement addLineToPoint:CGPointMake(tick.x + unit.x * 9, tick.y + unit.y * 9)];
             }
             measurement.lineWidth = selected ? 2 : 1.25;[color setStroke];[measurement stroke];
-            [self drawPoint:screen color:color selected:selected label:[NSString stringWithFormat:@"T%lu", (unsigned long)i + 1]];
-            if (selected && _millimetersPerUnit > 0 && CGRectContainsPoint(CGRectInset(self.bounds, -20, -20), screen)) {
-                NSString *label = [NSString stringWithFormat:@"X %.2f · Y %.2f mm", (double)(x * _millimetersPerUnit), (double)(y * _millimetersPerUnit)];
-                [self drawGuideLabel:label at:CGPointMake(screen.x, screen.y - 13) color:color];
-            }
+            if (active) [self drawPoint:screen color:color selected:selected label:[NSString stringWithFormat:@"T%lu", (unsigned long)i + 1]];
+            if (selected && _millimetersPerUnit > 0)
+                measurementCaption = [NSString stringWithFormat:@"T%lu · X %.2f · Y %.2f mm", (unsigned long)i + 1, (double)(x * _millimetersPerUnit), (double)(y * _millimetersPerUnit)];
         }
-    } else {
+    } else if (active) {
         for (NSUInteger i = 0; i < _guidePoints.count; i++)
             [self drawPoint:[self screenPoint:_guidePoints[i].CGPointValue] color:PKAmber() selected:NO label:[NSString stringWithFormat:@"T%lu", (unsigned long)i + 1]];
     }
-    for (NSUInteger i = 0; i < MIN((NSUInteger)2, _guideAxisPoints.count); i++) {
+    for (NSUInteger i = 0; active && i < MIN((NSUInteger)2, _guideAxisPoints.count); i++) {
         [self drawPoint:[self screenPoint:_guideAxisPoints[i].CGPointValue] color:PKBlue()
               selected:_mode == PKCanvasModeGuideAxis && (NSInteger)i == _nextGuideAxisPoint label:i == 0 ? @"O" : @"X"];
     }
     CGContextRestoreGState(context);
+    if (measurementCaption) [self drawMeasurementBadge:measurementCaption];
 }
 - (void)drawLoupe {
     if (!_loupeVisible) return;
@@ -587,20 +598,21 @@ static CGFloat PKClamp(CGFloat value, CGFloat minimum, CGFloat maximum) {
     border.lineWidth = 1;
     [border stroke];
 
-    if (_points.count) {
+    if (_points.count && _mode != PKCanvasModeCalibration) {
+        BOOL editingContour = _mode == PKCanvasModeTrace || _mode == PKCanvasModeAdjust;
         UIBezierPath *path = [UIBezierPath bezierPath];
         [path moveToPoint:[self screenPoint:_points[0].CGPointValue]];
         for (NSUInteger i = 1; i < _points.count; i++) [path addLineToPoint:[self screenPoint:_points[i].CGPointValue]];
         if (_closed && _points.count > 2) {
             [path closePath];
-            [[PKTeal() colorWithAlphaComponent:_referenceImage ? 0.10 : 0.15] setFill];
+            [[PKTeal() colorWithAlphaComponent:editingContour ? (_referenceImage ? 0.10 : 0.15) : 0.035] setFill];
             [path fill];
         }
-        [PKTeal() setStroke];
-        path.lineWidth = 2;
+        [[PKTeal() colorWithAlphaComponent:editingContour ? 1.0 : 0.38] setStroke];
+        path.lineWidth = editingContour ? 2 : 1;
         path.lineJoinStyle = kCGLineJoinRound;
         [path stroke];
-        for (NSUInteger i = 0; i < _points.count; i++) {
+        for (NSUInteger i = 0; editingContour && i < _points.count; i++) {
             BOOL selected = (NSInteger)i == _selectedIndex;
             NSString *label = _points.count <= 20 || selected ? [NSString stringWithFormat:@"%lu", (unsigned long)i + 1] : @"";
             [self drawPoint:[self screenPoint:_points[i].CGPointValue] color:PKTeal() selected:selected label:label];
