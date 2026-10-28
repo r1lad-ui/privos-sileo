@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-wL0Lb/SdsgQCIFHxue2kZUegSyf8qjoEe2d3eEvya4U='; style-src 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="color-scheme" content="dark">
+  <title>PRIV — aperçu du code temporaire</title>
+  <style>
+    :root { color-scheme: dark; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #f3f6f5; background: #101413; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 280px; background: radial-gradient(ellipse at 45% 0, #1d3029 0, #101413 62%); }
+    main { width: min(100%, 700px); margin: auto; padding: 34px 22px 32px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 43px; }
+    .brand { font-size: 22px; font-weight: 800; letter-spacing: .2em; }
+    .badge { border: 1px solid #466052; border-radius: 30px; padding: 7px 10px; color: #b6d8c7; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 0 0 12px; max-width: 540px; font-weight: 650; letter-spacing: -.035em; line-height: 1.1; font-size: clamp(32px, 6vw, 46px); }
+    .intro { color: #b4c1ba; font-size: 17px; line-height: 1.6; margin: 0 0 25px; }
+    .notice { border: 1px solid #665438; border-left: 3px solid #e8bd76; border-radius: 12px; background: #30291f; padding: 15px 17px; color: #e9d6b9; font-size: 14px; line-height: 1.55; margin-bottom: 23px; }
+    .notice strong { color: #ffdda8; display: block; margin-bottom: 4px; font-size: 15px; }
+    .code-card { background: #18211d; border: 1px solid #354a3f; border-radius: 23px; padding: 27px 22px 24px; box-shadow: 0 22px 65px #0004; }
+    .eyebrow { color: #b3c4ba; margin: 0 0 12px; font-size: 12px; text-transform: uppercase; letter-spacing: .14em; }
+    #code { display: block; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; color: #b7f8d4; font-size: clamp(36px, 11vw, 68px); font-variant-numeric: tabular-nums; letter-spacing: .035em; line-height: 1.25; white-space: nowrap; }
+    .timer-row { margin: 17px 0 10px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; color: #c5d3cb; font-size: 14px; }
+    #seconds { font-weight: 650; font-size: 18px; color: #e5f4ec; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    progress { appearance: none; display: block; width: 100%; height: 5px; border: 0; border-radius: 6px; overflow: hidden; color: #92dbb4; background: #33443b; }
+    progress::-webkit-progress-bar { background: #33443b; }
+    progress::-webkit-progress-value { background: #92dbb4; }
+    progress::-moz-progress-bar { background: #92dbb4; }
+    .meta { font-size: 12px; color: #9fb4a8; margin: 17px 0 0; line-height: 1.5; }
+    #status { color: #b3c4ba; font-size: 13px; line-height: 1.5; margin: 15px 0 0; min-height: 20px; }
+    #status.error { color: #ffcbab; }
+    .explanation { padding: 25px 1px 0; }
+    h2 { font-size: 18px; font-weight: 600; margin: 0 0 10px; }
+    .explanation p { margin: 0 0 12px; font-size: 14px; color: #b4c1ba; line-height: 1.65; }
+    details { margin-top: 20px; padding: 15px 0; border-top: 1px solid #34443b; border-bottom: 1px solid #34443b; color: #b4c1ba; font-size: 13px; line-height: 1.7; }
+    summary { color: #d0ded6; cursor: pointer; padding: 4px 0; }
+    summary:focus-visible { outline: 2px solid #92dbb4; outline-offset: 5px; border-radius: 2px; }
+    details p { margin: 10px 0 0; }
+    details code { display: block; overflow-wrap: anywhere; padding-top: 6px; color: #c7e4d5; }
+    footer { padding-top: 23px; color: #879d90; font-size: 12px; line-height: 1.6; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (max-width: 380px) { main { padding: 24px 17px; } header { margin-bottom: 31px; } .code-card { padding: 24px 17px; } .badge { font-size: 10px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header><span class="brand">PRIV</span><span class="badge">Prototype</span></header>
+    <h1>Un code qui suit<br>la minute.</h1>
+    <p class="intro">Aperçu d’un code temporaire calculé à partir d’un secret et de l’heure.</p>
+
+    <aside class="notice" aria-label="Limite de cette démonstration">
+      <strong>Démonstration · clé de test publique</strong>
+      Ce code n’offre aucune sécurité réelle. Il ne déverrouille pas l’iPhone et n’est relié à aucun appareil.
+    </aside>
+
+    <section class="code-card" aria-labelledby="code-title">
+      <h2 class="eyebrow" id="code-title">Code de démonstration</h2>
+      <output id="code" aria-label="Code de démonstration en cours de calcul">••• •••</output>
+      <div class="timer-row" aria-hidden="true"><span>Prochaine minute dans</span><span id="seconds">— s</span></div>
+      <progress id="remaining" max="60" value="0" aria-hidden="true"></progress>
+      <p class="meta">6 chiffres · période de 60 secondes · HMAC-SHA-256</p>
+      <p id="status" role="status" aria-live="polite">Calcul local en cours…</p>
+    </section>
+
+    <section class="explanation" aria-labelledby="how-title">
+      <h2 id="how-title">Le principe</h2>
+      <p>Deux appareils qui partagent le même secret et la même heure peuvent calculer le même code. Ici, la clé est volontairement publique : tout le monde obtient le même résultat.</p>
+      <p>Pour un vrai usage, le secret devrait être créé et protégé sur les appareils concernés. Il faudrait aussi un autre appareil pour lire le code pendant que l’iPhone est verrouillé.</p>
+    </section>
+
+    <details>
+      <summary>Voir la clé publique utilisée</summary>
+      <p>Vecteur de test SHA-256 du RFC 6238, encodé en UTF-8 (32 octets) :</p>
+      <code>12345678901234567890123456789012</code>
+      <p>Le profil de cet aperçu utilise une période de 60 secondes et 6 chiffres. Ce fichier ne crée, n’importe et ne conserve aucun secret personnel.</p>
+    </details>
+    <footer>Fonctionne hors ligne dans un navigateur compatible avec Web Crypto. Aucune donnée enregistrée, aucun appel réseau.</footer>
+    <noscript><p class="notice">JavaScript doit être activé pour calculer le code de cette démonstration.</p></noscript>
+  </main>
+
+  <script type="module" id="otp-demo-code">
+/* Public RFC 6238 SHA-256 test key. This is never a production credential. */
+export const PUBLIC_TEST_KEY = "12345678901234567890123456789012";
+export const PROFILE = Object.freeze({ period: 60, digits: 6, algorithm: "SHA-256" });
+
+/** Return a strict, public-test-only TOTP. No user secrets enter this page. */
+export async function publicTestCode(unixSeconds, period = PROFILE.period, digits = PROFILE.digits, subtle = globalThis.crypto?.subtle) {
+  if (!Number.isSafeInteger(unixSeconds) || unixSeconds < 0) throw new RangeError("Invalid Unix time");
+  if (!Number.isSafeInteger(period) || period <= 0) throw new RangeError("Invalid period");
+  if (digits !== 6 && digits !== 8) throw new RangeError("Unsupported digit count");
+  if (!subtle) throw new Error("WEB_CRYPTO_UNAVAILABLE");
+  let counter = BigInt(Math.floor(unixSeconds / period));
+  const message = new Uint8Array(8);
+  for (let i = 7; i >= 0; --i) { message[i] = Number(counter & 255n); counter >>= 8n; }
+  const key = await subtle.importKey("raw", new TextEncoder().encode(PUBLIC_TEST_KEY), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const digest = new Uint8Array(await subtle.sign("HMAC", key, message));
+  const offset = digest[digest.length - 1] & 15;
+  const binary = ((digest[offset] & 127) * 0x1000000) + (digest[offset + 1] << 16) + (digest[offset + 2] << 8) + digest[offset + 3];
+  return String(binary % (10 ** digits)).padStart(digits, "0");
+}
+
+/** Whole seconds displayed until the next minute, and smooth progress value. */
+export function phaseAt(unixMilliseconds) {
+  if (!Number.isSafeInteger(unixMilliseconds) || unixMilliseconds < 0) throw new RangeError("Invalid timestamp");
+  const periodMs = PROFILE.period * 1000;
+  const remainder = periodMs - (unixMilliseconds % periodMs);
+  return { counter: Math.floor(unixMilliseconds / periodMs), seconds: Math.ceil(remainder / 1000), progress: remainder / 1000 };
+}
+
+export function startDemo(doc = document, clock = () => Date.now(), schedule = setInterval) {
+  const code = doc.getElementById("code");
+  const seconds = doc.getElementById("seconds");
+  const remaining = doc.getElementById("remaining");
+  const status = doc.getElementById("status");
+  let displayedCounter = null;
+  let requestedCounter = null;
+  let failed = false;
+  let requestVersion = 0;
+
+  function fail() {
+    failed = true;
+    requestVersion++;
+    code.textContent = "— — —";
+    code.setAttribute("aria-label", "Code indisponible");
+    seconds.textContent = "— s";
+    remaining.value = 0;
+    status.classList.add("error");
+    status.textContent = "Calcul indisponible. Ce navigateur doit autoriser Web Crypto pour les fichiers locaux. Essaie une version récente de Chrome sur ton Chromebook.";
+  }
+
+  async function tick() {
+    if (failed) return;
+    try {
+      const now = clock();
+      const phase = phaseAt(now);
+      seconds.textContent = `${phase.seconds} s`;
+      remaining.value = phase.progress;
+      if (phase.counter === displayedCounter || phase.counter === requestedCounter) return;
+      requestedCounter = phase.counter;
+      const version = ++requestVersion;
+      /* Hide an expired code while the new HMAC is being calculated. */
+      displayedCounter = null;
+      code.textContent = "••• •••";
+      code.setAttribute("aria-label", "Calcul du nouveau code de démonstration");
+      const value = await publicTestCode(Math.floor(now / 1000));
+      if (version !== requestVersion || failed) return;
+      if (phaseAt(clock()).counter !== phase.counter) {
+        requestedCounter = null;
+        await tick();
+        return;
+      }
+      displayedCounter = phase.counter;
+      requestedCounter = null;
+      code.textContent = `${value.slice(0, 3)} ${value.slice(3)}`;
+      code.setAttribute("aria-label", `Code de démonstration : ${value.split("").join(" ")}`);
+      status.textContent = "Code public calculé sur cet appareil. Aucun déverrouillage activé.";
+    } catch { fail(); }
+  }
+
+  const ready = tick();
+  const timer = schedule(() => { void tick(); }, 200);
+  doc.addEventListener("visibilitychange", () => { if (!doc.hidden) void tick(); });
+  return { tick, timer, ready };
+}
+
+if (typeof document !== "undefined") startDemo();
+  </script>
+</body>
+</html>
