@@ -166,7 +166,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
 @property(nonatomic,strong) UITextField *reference,*thickness,*xField,*yField;
 @property(nonatomic,strong) UISegmentedControl *modes;
 @property(nonatomic,strong) UIButton *closeButton,*undoButton,*redoButton;
-@property(nonatomic,strong) UIButton *referenceButton,*referenceFlipButton,*copyGuideButton,*deleteGuideButton;
+@property(nonatomic,strong) UIButton *referenceButton,*referenceFlipButton,*guideCopyButton,*deleteGuideButton;
 @property(nonatomic,strong) UILabel *referenceHelp,*guideSelection;
 @property(nonatomic,strong) UITextField *guideXField,*guideYField;
 @property(nonatomic,strong) UISegmentedControl *guideModes;
@@ -221,9 +221,9 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     self.guideXField=PKField(@"X (mm)");self.guideYField=PKField(@"Y (mm)");self.guideXField.keyboardType=self.guideYField.keyboardType=UIKeyboardTypeNumbersAndPunctuation;
     self.guideXField.accessibilityLabel=@"Distance du trait le long de l’axe O–X, en millimètres";self.guideYField.accessibilityLabel=@"Distance signée du point à l’axe, en millimètres";
     UIButton *moveGuide=PKButton(@"Déplacer",nil,NO,self,@selector(moveGuide));UIStackView *guideFields=PKStack(@[self.guideXField,self.guideYField,moveGuide],YES,8);guideFields.distribution=UIStackViewDistributionFillEqually;
-    self.copyGuideButton=PKButton(@"Copier ce point dans le contour",@"plus.circle",NO,self,@selector(copyGuideToContour));
+    self.guideCopyButton=PKButton(@"Copier ce point dans le contour",@"plus.circle",NO,self,@selector(copyGuideToContour));
     self.deleteGuideButton=PKButton(@"Retirer le trait sélectionné",@"minus.circle",NO,self,@selector(deleteGuide));
-    self.guideCoordinates=PKStack(@[self.guideSelection,guideFields,self.copyGuideButton,self.deleteGuideButton],NO,8);
+    self.guideCoordinates=PKStack(@[self.guideSelection,guideFields,self.guideCopyButton,self.deleteGuideButton],NO,8);
     self.selection=PKLabel(@"",13,YES);self.xField=PKField(@"X");self.yField=PKField(@"Y");self.xField.accessibilityLabel=@"Abscisse du point depuis le bord gauche, en millimètres";self.yField.accessibilityLabel=@"Ordonnée du point depuis le bord haut, en millimètres";
     UIButton *move=PKButton(@"Déplacer",nil,NO,self,@selector(movePoint));UIStackView *coordinates=PKStack(@[self.xField,self.yField,move],YES,8);coordinates.distribution=UIStackViewDistributionFillEqually;
     self.closeButton=PKButton(@"Fermer le contour",@"checkmark.seal",NO,self,@selector(toggleClosed));
@@ -274,7 +274,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     if(selected&&scale>0){CGPoint p=self.doc.points[index].CGPointValue;if(!self.xField.isFirstResponder)self.xField.text=[NSString stringWithFormat:@"%.3f",p.x*scale];if(!self.yField.isFirstResponder)self.yField.text=[NSString stringWithFormat:@"%.3f",p.y*scale];}
     else {self.xField.text=@"";self.yField.text=@"";}
     NSInteger guide=self.canvas.selectedGuideIndex;BOOL guideSelected=guide>=0&&guide<(NSInteger)self.doc.guidePoints.count;
-    self.deleteGuideButton.enabled=guideSelected;self.copyGuideButton.enabled=guideSelected;
+    self.deleteGuideButton.enabled=guideSelected;self.guideCopyButton.enabled=guideSelected;
     self.guideXField.enabled=self.guideYField.enabled=guideSelected&&self.doc.hasValidGuideAxis&&scale>0;
     if(guideSelected&&self.doc.hasValidGuideAxis&&scale>0){CGPoint p=[self.doc guideCoordinatesForPoint:self.doc.guidePoints[guide].CGPointValue];self.guideSelection.text=[NSString stringWithFormat:@"Trait %ld · X %.3f / Y %+.3f mm\nOrigine O · direction X · côté signé de l’axe",(long)guide+1,p.x,p.y];if(!self.guideXField.isFirstResponder)self.guideXField.text=[NSString stringWithFormat:@"%.4f",p.x];if(!self.guideYField.isFirstResponder)self.guideYField.text=[NSString stringWithFormat:@"%.4f",p.y];}
     else{self.guideXField.text=@"";self.guideYField.text=@"";self.guideSelection.text=!(scale>0)?@"Étalonne la référence pour afficher les mesures en mm.":(self.doc.closed?@"Sélectionne un trait. Rouvre le contour pour y copier des points.":@"Sélectionne un trait pour lire ou régler ses distances en mm.");}
