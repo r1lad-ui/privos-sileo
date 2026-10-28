@@ -27,7 +27,7 @@ import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "native/PRIVKey"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 PACKAGE_ID = "fr.privos.keylab"
 APP_NAME = "PRIVKey"
 APP_PATH = "var/jb/Applications/PRIVKey.app"
@@ -35,7 +35,8 @@ DEB_NAME = f"{PACKAGE_ID}_{VERSION}_iphoneos-arm64.deb"
 DEFAULT_OUTPUT = ROOT / "build/keylab"
 DEFAULT_EPOCH = 1793203200  # 2026-10-28 16:00 UTC
 SOURCE_PATHS = ["native/PRIVKey", "scripts/build_keylab.py",
-                "scripts/test_key_geometry.c", ".github/workflows/build-keylab.yml"]
+                "scripts/test_key_geometry.c", "scripts/test_key_package_install.py",
+                ".github/workflows/build-keylab.yml"]
 
 
 def run(args: list[str], **kwargs) -> subprocess.CompletedProcess:
@@ -102,7 +103,7 @@ def app_info(sdk_version: str) -> dict:
         "CFBundleName": APP_NAME,
         "CFBundlePackageType": "APPL",
         "CFBundleShortVersionString": VERSION,
-        "CFBundleVersion": "1",
+        "CFBundleVersion": "2",
         "MinimumOSVersion": "15.0",
         "DTPlatformName": "iphoneos",
         "DTSDKName": "iphoneos" + sdk_version,
@@ -176,11 +177,26 @@ def build_native(destination: Path) -> tuple[Path, dict]:
 
 
 def tar_gz(files: dict[str, tuple[bytes, int]]) -> bytes:
+    # dpkg creates directories from explicit archive entries. A successful
+    # `dpkg-deb --extract` is not sufficient to prove a package can be installed:
+    # its tar extractor also creates missing parents, whereas dpkg --unpack
+    # requires them in the data archive on a fresh installation.
+    directories = {"."}
+    for name in files:
+        if not name or name.startswith("/") or ".." in Path(name).parts:
+            raise ValueError("Unsafe package member: " + name)
+        directories.update(parent.as_posix() for parent in Path(name).parents)
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w", format=tarfile.USTAR_FORMAT) as archive:
+        for name in sorted(directories, key=lambda value: (len(Path(value).parts), value)):
+            item = tarfile.TarInfo("./" if name == "." else "./" + name + "/")
+            item.type = tarfile.DIRTYPE
+            item.uid = item.gid = 0
+            item.uname = item.gname = "root"
+            item.mode = 0o755
+            item.mtime = epoch()
+            archive.addfile(item)
         for name in sorted(files):
-            if name.startswith("/") or ".." in Path(name).parts:
-                raise ValueError("Unsafe package member: " + name)
             contents, mode = files[name]
             item = tarfile.TarInfo("./" + name)
             item.uid = item.gid = 0
@@ -215,7 +231,7 @@ def control_text(installed_kib: int) -> str:
             "Description: Releve natif de contours, etalonnage et modeles de silhouette pour cles de test. Exports locaux SVG, JSON et STL. Prototype a valider sur iPhone.\n")
 
 
-POSTINST = """#!/bin/sh
+POSTINST = """#!/var/jb/bin/sh
 set -eu
 case "${1:-}" in
   configure)
@@ -226,7 +242,7 @@ case "${1:-}" in
 esac
 exit 0
 """
-PRERM = """#!/bin/sh
+PRERM = """#!/var/jb/bin/sh
 set -eu
 case "${1:-}" in
   remove|deconfigure)
@@ -285,7 +301,26 @@ def read_deb(package: Path) -> tuple[str, list[str]]:
             raise ValueError("Missing Debian control")
         control = control_file.read().decode("utf-8")
     with tarfile.open(fileobj=io.BytesIO(members["data.tar.gz"]), mode="r:gz") as archive:
-        paths = [item.name.removeprefix("./") for item in archive.getmembers()]
+        paths = []
+        directories = set()
+        shared_parents = {parent.as_posix() for parent in Path(APP_PATH).parents}
+        for item in archive.getmembers():
+            name = item.name.removeprefix("./").rstrip("/") or "."
+            if name.startswith("/") or ".." in Path(name).parts:
+                raise ValueError("Unsafe package data member: " + name)
+            if item.isdir():
+                if name not in shared_parents and name != APP_PATH and not name.startswith(APP_PATH + "/"):
+                    raise ValueError("Unexpected package directory: " + name)
+                if item.mode != 0o755:
+                    raise ValueError("Unexpected package directory permissions: " + name)
+                directories.add(name)
+            elif item.isfile():
+                required = {parent.as_posix() for parent in Path(name).parents}
+                if not required.issubset(directories):
+                    raise ValueError("Missing directory entries before file: " + name)
+                paths.append(name)
+            else:
+                raise ValueError("Unexpected package data member type: " + name)
     return control, paths
 
 

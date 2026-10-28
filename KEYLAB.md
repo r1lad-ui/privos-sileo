@@ -1,4 +1,4 @@
-# PRIV Key LAB 0.1.0
+# PRIV Key LAB 0.1.1
 
 Application iOS native de relevé manuel de silhouette, pour l'iPhone SE 2020 sous iOS 17.5 et les jailbreaks rootless compatibles. Aucun site ni WebView dans l'application. Elle utilise UIKit, les sélecteurs de photos d'iOS et SceneKit.
 
@@ -10,7 +10,13 @@ Le paquet s'appelle **PRIV Key LAB**, identifiant fr.privos.keylab. Il est disti
 
 Après la réussite du workflow **Build PRIV Key**, actualiser les sources dans Sileo, rechercher **PRIV Key LAB**, puis installer. L'icône **PRIV Key** est enregistrée par le script du paquet. Le paquet installe seulement son application dans /var/jb/Applications/PRIVKey.app. Il ne modifie ni PRIV Control, ni ses données, ni SpringBoard.
 
-Le fichier installable est publié dans debs/fr.privos.keylab_0.1.0_iphoneos-arm64.deb. La signature ad hoc de ce paquet nécessite un environnement jailbreaké compatible.
+Le fichier installable est publié dans debs/fr.privos.keylab_0.1.1_iphoneos-arm64.deb. La signature ad hoc de ce paquet nécessite un environnement jailbreaké compatible.
+
+### Correction d'installation 0.1.1
+
+La version 0.1.0 omettait les entrées de dossiers dans l'archive du paquet. Une installation neuve avec dpkg pouvait échouer avec « unable to create … PRIVKey.app/… : No such file or directory ». La version 0.1.1 déclare les dossiers avant leurs fichiers et utilise le shell rootless /var/jb/bin/sh dans les scripts d'installation et de retrait.
+
+Si l'installation 0.1.0 a échoué, actualiser la source dans Sileo et installer la version 0.1.1. Il n'est pas nécessaire de supprimer les relevés ni de réinitialiser le jailbreak pour essayer cette mise à jour. Si une erreur demeure, conserver les lignes du journal situées avant « subprocess returned an error code » : cette dernière ligne seule ne précise pas la cause.
 
 ## Premier essai
 
@@ -62,6 +68,8 @@ Les sources se trouvent dans native/PRIVKey/. Sur macOS avec Xcode :
     python3 scripts/build_keylab.py
 
 Le workflow .github/workflows/build-keylab.yml compile l'application arm64, vérifie sa signature ad hoc, crée le paquet rootless, puis l'ajoute à la source Sileo en conservant les autres paquets.
+
+Avant la compilation, un test Linux effectue un véritable dépaquetage dpkg dans des racines temporaires isolées, dont une avec /var/jb représenté par un lien symbolique. Les fichiers de test ne sont jamais exécutés et la base de paquets de l'hôte n'est pas modifiée. Ce test vérifie la structure et les permissions nécessaires à l'installation ; il ne remplace pas la configuration ni l'exécution sur iOS.
 
 Les tests de géométrie et d'emballage peuvent aussi être exécutés sur Linux :
 

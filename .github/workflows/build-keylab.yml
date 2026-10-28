@@ -7,6 +7,7 @@ on:
       - 'native/PRIVKey/**'
       - 'scripts/build_keylab.py'
       - 'scripts/test_key_geometry.c'
+      - 'scripts/test_key_package_install.py'
       - '.github/workflows/build-keylab.yml'
   workflow_dispatch:
 
@@ -18,7 +19,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  package-installation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7.0.1
+      - name: Verify fresh dpkg unpack and rootless directory layout
+        run: sudo python3 scripts/test_key_package_install.py
   build:
+    needs: package-installation
     runs-on: macos-15
     timeout-minutes: 20
     steps:
@@ -31,7 +41,7 @@ jobs:
       - name: Keep installable package and validation report
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: PRIV-Key-0.1.0-${{ github.run_number }}
+          name: PRIV-Key-0.1.1-${{ github.run_number }}
           path: |
             build/keylab/*.deb
             build/keylab/validation.json
@@ -44,4 +54,4 @@ jobs:
         run: |
           python3 scripts/build_keylab.py --publish-git \
             --built-commit "$KEYLAB_BUILD_COMMIT" \
-            --package build/keylab/fr.privos.keylab_0.1.0_iphoneos-arm64.deb
+            --package build/keylab/fr.privos.keylab_0.1.1_iphoneos-arm64.deb

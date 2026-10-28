@@ -160,7 +160,7 @@ static void PKPopover(UIAlertController *alert,UIViewController *vc){
     self.navigationItem.rightBarButtonItem=[[UIBarButtonItem alloc]initWithImage:[UIImage systemImageNamed:@"questionmark.circle"] style:UIBarButtonItemStylePlain target:self action:@selector(help)];
     UIScrollView *scroll=[UIScrollView new];scroll.translatesAutoresizingMaskIntoConstraints=NO;scroll.keyboardDismissMode=UIScrollViewKeyboardDismissModeOnDrag;[self.view addSubview:scroll];
     [NSLayoutConstraint activateConstraints:@[[scroll.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],[scroll.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],[scroll.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],[scroll.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor]]];
-    UILabel *eyebrow=PKLabel(@"RELEVÉ MANUEL · 0.1.0",11,YES);eyebrow.textColor=PKAccent();
+    UILabel *eyebrow=PKLabel(@"RELEVÉ MANUEL · 0.1.1",11,YES);eyebrow.textColor=PKAccent();
     UILabel *headline=PKLabel(@"Du contour au modèle.",26,YES);
     self.summary=PKLabel(@"",14,NO);self.summary.textColor=PKMuted();
     UIButton *source=PKButton(@"Photo / nouveau",@"plus.viewfinder",NO,self,@selector(sourceMenu));
